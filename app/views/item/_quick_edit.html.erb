@@ -1,0 +1,155 @@
+      <div class="float-right icon-large icon-comment hpad link enable-hover align-right"
+           onclick="$(this).next().toggle();"></div>
+      <div id="quick_edit_comments" style="display: none;">
+         <% if !@comments.blank? %>
+         <div class="st1">
+            <%= @comments.first.content %>
+            <% if @comments.count > 1 %>
+            <span class="st1 link"
+                  onclick="$(this).next().toggle();">
+               + <%= @comments.count - 1 %> more
+            </span>
+            <div id="quick_edit_all_comments" style="display: none;">
+            <% @comments.each_with_index do |comment, i| %>
+               <%= render inline: comment.content + "<br>" if i != 0 %>
+            <% end %>
+            </div>
+            <% end %>
+         </div>
+         <% end %>
+         <div id="add_comment">
+            <%= form_for "comment",
+                         url:    comment_index_path,
+                         method: "post",
+                         remote: true,
+                         html:   { id: "add_comment_form" } do |comment_form|
+            %>
+               <%= comment_form.hidden_field "user_id"     %>
+               <%= comment_form.hidden_field "object_id"   %>
+               <%= comment_form.hidden_field "object_type" %>
+               <%= comment_form.text_field "content", maxlength: 255, size: "auto", placeholder: "Add a comment", class: "expand-x" %>
+               <%= comment_form.submit class: "hidden" %>
+            <% end %>
+         </div>
+      </div>
+
+      <%= form_for "",
+                   url:    @vendor.nil? ? quick_update_list_item_path(@item.list_id, @item.id)
+                                        : quick_update_list_item_path(@item.list_id, @item.id, vendor_id: @vendor.id),
+                   method: "patch",
+                   remote: true,
+                   html:   { id: "quick_edit_form" } do |f|
+      %>
+         <%= fields_for @item do |item_form| %>
+            <div>
+               <%= item_form.label      "Priority" %><br>
+               <%= item_form.select     "priority", options_for_select([
+                                                       ["Absolute must",    100],
+                                                       ["Important",         95],
+                                                       ["High",              75],
+                                                       ["Normal",            50],
+                                                       ["Low",               25],
+                                                       ["Only get on sale",   5],
+                                                       ["Don't bother",       0]
+                                                    ], @item.priority)
+               %>
+            </div>
+            <div>
+               <%= item_form.label      "Notes"                           %><br>
+               <%= item_form.text_field "notes",    maxlength: 255,
+                                                    size:      "auto",
+                                                    class:     "expand-x" %>
+            </div>
+         <% end # fields_for %>
+
+         <div style="height: 1.5em; line-height: 1.75em;">
+            <%= label_tag "vendor_info_heading",
+                          @vendor.name + " information",
+                          class: "link",
+                          onclick: "$(this).parent().next().toggle();"
+            %>
+         </div>
+         <div id="vendor_info" style="display: none;">
+         <%= fields_for @inventory do |inv_form| %>
+            <%= inv_form.hidden_field "id"         %>
+            <%= inv_form.hidden_field "vendor_id"  %>
+            <%= inv_form.hidden_field "product_id" %>
+
+            <div class="inline-block">
+               <%= inv_form.label       "Price"                           %><br>
+               <%= inv_form.text_field  "price",    maxlength: 10,
+                                                    size:      10,
+                                                    class:     "expand-x" %><br>
+            </div>
+            <div class="inline-block">
+               <%= inv_form.label       "Location"                        %><br>
+               <% if @datalist.nil? %>
+               <%= inv_form.text_field  "location", maxlength: 100,
+                                                    size:      "auto",
+                                                    class:     "expand-x" %><br>
+               <% else%>
+               <%= inv_form.text_field  "location", maxlength: 100,
+                                                    size:      "auto",
+                                                    class:     "expand-x",
+                                                    list:      "locations_datalist" %>
+<%= render partial: "shared/datalist_simple", locals: { datalist_id: "locations_datalist" } -%>
+               <% end # if datalist %>
+            </div>
+         <% end # fields_for %>
+         </div>
+
+         <div style="height: 1.5em; line-height: 1.75em;">
+            <%= label_tag "product_info_heading",
+                          "Product information",
+                          class: "link",
+                          style: "min-height: 2em;",
+                          onclick: "$(this).parent().next().toggle();"
+            %>
+         </div>
+         <div id="product_info" style="display: none;">
+         <%= fields_for @product do |product_form| %>
+            <div class="expand-x">
+               <%= product_form.label       "Description"                        %><br>
+               <%= product_form.text_field  "description", maxlength: 100,
+                                                           size:      "auto",
+                                                           class:     "expand-x" %><br>
+            </div>
+            <div class="inline-block">
+               <%= product_form.label       "Size"                               %><br>
+               <%= product_form.text_field  "size",        maxlength: 20,
+                                                           size:      "auto",
+                                                           class:     "expand-x" %><br>
+            </div>
+         <% end # fields_for %>
+         </div>
+
+         <%= f.submit "", class: "hidden" %>
+      <% end # form %>
+
+      <div class="hvpad align-right">
+         <div class="inline-block icon-large icon-delete pad-left link enable-hover align-right"
+              onclick="delete_to('<%= list_item_path(@item.list_id, @item.id) %>',
+                                 '<p>Remove <font class=&quot;dialog-highlight&quot;><%= escape_javascript(@product.description) %></font> from the list?</p>' +
+                                 '<p>This will only delete the list item, not the product.</p>' +
+                                 '<p>You can\'t undo this.</p>');">
+         </div>
+         <div class="inline-block" style="width: .5em;">&nbsp;</div>
+         <div class="inline-block icon-large icon-cancel pad-left link enable-hover align-right"
+              onclick="content.toggle_quick_edit(null, null, true);">
+         </div>
+         <div class="inline-block icon-large icon-ok pad-left link enable-hover"
+              onclick="$('#quick_edit_form').submit();">
+         </div>
+      </div>
+
+<!--
+      <div class="h3 align-center">
+         <%= link_to "Edit list item", edit_list_item_path(@item.list_id, @item.id) %>
+         <% if !@product.id.nil? %>
+         &bull; <%= link_to "Edit product", edit_product_path(@product.id) %>
+         <% end %>
+         <% if !@inventory.id.nil? %>
+         <br><%= link_to "Edit " + @vendor.name + " inventory item", edit_vendor_inventory_path(@inventory.vendor_id, @inventory.id) %>
+         <% end %>
+      </div>
+-->

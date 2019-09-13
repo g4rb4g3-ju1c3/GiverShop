@@ -1,0 +1,53 @@
+   <script type="text/javascript">
+
+      init_header({
+         page_title: "Edit vendor: <%= render inline: escape_javascript(@vendor.name) %>",
+         title:      "Edit vendor",
+         edit_form:  true
+      });
+
+      function content_callback(action, data)
+      {
+         switch (action) {
+
+            case "submit":
+               $("#vendor_edit_form").submit();
+               break;
+
+            case "cancel":
+               history.back();
+               break;
+
+            case "update":
+               history.back();
+               break;
+
+            default:
+               show_error("vendor#edit content_callback: unknown action \"" + action + "\"");
+               break;
+         }
+      }
+
+   </script>
+
+   <div class="hvpad">
+      <%= form_for "vendor",
+                   url:    vendor_path,
+                   method: "patch",
+                   remote: true,
+                   html:   { id: "vendor_edit_form" } do |f|
+      %>
+         <div class="pad-bottom">
+            <%= f.label      "Name"                  %>
+            <%= f.text_field "name",  maxlength: 100 %>
+         </div>
+
+         <div class="pad-bottom">
+            <%= f.label      "Notes"                 %>
+            <%= f.text_area  "notes", maxlength: 500 %>
+         </div>
+
+         <%= f.submit "", class: "hidden" %>
+      <% end %>
+
+   </div>

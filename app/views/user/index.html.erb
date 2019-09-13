@@ -1,0 +1,60 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         givershop.init({
+            controller:  "<%= controller_name %>",
+            action:      "<%= action_name     %>",
+            add_path:    "<%= new_user_path   %>",
+
+            title:       "Users",
+            search_bar:  true,
+            placeholder: "New user"
+         });
+      });
+
+   </script>
+
+<%= render partial: "shared/datalist", locals: { add_new_text: "Add new user" } -%>
+
+   <% if @users.any? %>
+   <div class="list border-bottom" id="user_list">
+      <% user_info_id = 0 %>
+      <% @users.each do |user| %>
+
+      <div class="list-row" id="list_row_<%= user.id %>">
+         <div class="table-cell expand-x" style="overflow: hidden;">
+            <% user_info_id += 1 %>
+            <div id="user_info_<%= user_info_id %>" class="user_info rel-pos">
+               <div id="username" class="abs-pos truncate"><%=     link_to edit_user_path(user.id) do %><%= user.username %>&nbsp;<% end %></div>
+               <div id="name"     class="abs-pos truncate st2"><%= link_to edit_user_path(user.id) do %><%= user.name     %><%       end %></div>
+            </div>
+            <div class="st2">
+               <% if !user.phone.blank? %>
+               <%= link_to "tel:" + user.phone do%><%= user.phone %><% end %>
+               <% end %>
+               <%= "&bull;".html_safe if !user.phone.blank? && !user.email.blank? %>
+               <% if !user.email.blank? %>
+               <%= mail_to user.email do%><%= user.email %><% end %>
+               <% end %>
+            </div>
+            <% if !user.notes.blank? %>
+            <div class="st2"><%= user.notes %></div>
+            <% end %>
+         </div>
+         <div class="table-cell valign-top">
+            <div class="icon-list icon-edit link enable-hover"
+                 onclick="navigate_to('<%= edit_user_path(user.id) %>');"></div>
+         </div>
+         <div class="table-cell pad-left valign-top">
+            <div class="icon-list icon-delete link enable-hover"
+                 onclick="delete_to('<%= user_path(user.id) %>',
+                                    '<p>Nuke <font class=&quot;dialog-highlight&quot;><%= user.username %></font>?</p>');">
+            </div>
+         </div>
+      </div>
+      <% end %>
+   </div>
+   <% else %>
+<%= render partial: "shared/empty_list", locals: { caption: "No users" } -%>
+   <% end %>

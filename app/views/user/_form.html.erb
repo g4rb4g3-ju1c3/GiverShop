@@ -1,0 +1,66 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         givershop.init({
+            controller:  "<%= controller_name %>",
+            action:      "<%= action_name     %>",
+
+            page_title: "Edit user: <%= render inline: escape_javascript(@user.name) %>",
+            title:      "Edit user",
+            edit_form:  true
+         });
+      });
+
+   </script>
+
+   <div class="hvpad">
+
+      <%= form_for @user,
+                   url:    submit_path,
+                   method: submit_method,
+                   remote: true,
+                   html: { id: "user_edit_form" } do |f|
+      %>
+         <div>
+            <%= f.label          "User name"                             %><br>
+            <%= f.text_field     "username",              maxlength: 50  %>
+         </div>
+
+         <div>
+            <%= f.label          "Password"                              %><br>
+            <%= f.password_field "password",              maxlength: 72  %>
+         </div>
+
+         <div>
+            <%= f.label          "Confirm password"                      %><br>
+            <%= f.password_field "password_confirmation", maxlength: 72  %>
+         </div>
+
+         <div>
+            <%= f.label          "Name"                                  %><br>
+            <%= f.text_field     "name",                  maxlength: 100 %>
+         </div>
+
+         <div>
+            <%= f.label          "Phone"                                 %><br>
+            <%= f.phone_field    "phone",                 maxlength: 50  %>
+         </div>
+
+         <div>
+            <%= f.label          "Email"                                 %><br>
+            <%= f.text_field     "email",                 maxlength: 254 %>
+         </div>
+
+         <% if auth_su %>
+         <div class="pad-bottom">
+            <%= f.label          "User notes"                            %><br>
+            <%= f.text_area      "notes",                 maxlength: 500 %>
+         </div>
+
+         <% end %>
+         <%= f.submit "", class: "hidden" %>
+
+      <% end %>
+
+   </div>

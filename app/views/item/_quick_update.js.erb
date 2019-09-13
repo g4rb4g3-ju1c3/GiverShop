@@ -1,0 +1,32 @@
+
+
+
+   clear_giver_box();
+   update_giver_button();
+   hide_datalist();
+   hide_errors();
+   content.toggle_quick_edit(null, null, true);
+
+   var $existing_row = $("#items_list #list_row_<%= @item.id %>");
+
+   $existing_row.after(
+   "<%= escape_javascript(render partial: "shared/list_item",
+      locals: {
+         row_id:           @item.id,
+         item_checked:     @item.checked,
+         item_checked_url: update_checked_list_item_path(@item.list_id, @item.id),
+         item_text:        @item.description,
+         item_subtext:     @item.size,
+         item_url:         quick_edit_list_item_path(@item.list_id, @item.id, vendor_id: @item.vendor_id.to_s),
+         item_priority:    @item.priority,
+         item_quantity:    @item.quantity,
+         item_notes:       @item.notes,
+         product_notes:    @item.product_notes,
+         inventory_price:  @item.price
+      })
+   -%>
+   ");
+   $existing_row.remove();
+
+
+

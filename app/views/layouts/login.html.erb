@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Give'rShop</title>
+
+<%= stylesheet_link_tag    'application', 'data-turbolinks-track' => true, media: 'all' %>
+
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+<%= csrf_meta_tags %>
+
+</head>
+
+<body>
+
+<div id="body" style="height: 100%;">
+
+<%= yield -%>
+
+</div>
+
+</body>
+
+</html>

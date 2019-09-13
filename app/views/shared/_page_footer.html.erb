@@ -1,0 +1,31 @@
+   <div id="footer">
+
+      <div id="errorbar">
+         <div class="abs-pos top right link icon-window-close" tabindex="0" onclick="hide_errors();"></div>
+         <div class="hvpad st1" id="error_message">
+         </div>
+      </div>
+
+      <div class="toolbar align-center" id="nav_toolbar">
+         <div class="toolbar-button button-large enable-hover icon-scroll-top"    onclick="scroll_to_top();"></div>
+         <div class="toolbar-button button-large enable-hover icon-scroll-bottom" onclick="scroll_to_bottom();"></div>
+         <div class="toolbar-button button-large enable-hover icon-back"          onclick="history.back();"></div>
+         <div class="toolbar-button button-large enable-hover icon-forward"       onclick="history.forward();"></div>
+         <div class="toolbar-button button-large enable-hover icon-refresh"       onclick="hide_datalist(); hide_errors(); refresh_content();"></div>
+
+<!--
+         <div class="toolbar-button button-large enable-hover icon-kitten-kitten"
+              onclick="show_dialog('<p>Stay away from muslims.</p><p>Muslims are dangerous.</p>', {
+            ok_button:      function() { alert('They explode.'); },
+            cancel_button:  true
+//            close_button:   true,
+//            save_button:    true,
+//            delete_button:  true,
+//            discard_button: true
+            });">
+         </div>
+-->
+
+      </div>
+
+   </div>

@@ -1,0 +1,4 @@
+#!/bin/bash
+pushd ~/Dev/givershop
+rake db:rollback STEP=100
+popd

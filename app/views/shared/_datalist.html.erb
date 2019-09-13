@@ -1,0 +1,94 @@
+<% if !defined? add_new_text then add_new_text = "Add new" end %>
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         var $header = $("#header");
+
+         $header.append($("#content #datalist"));
+         if (typeof content.populate_datalist_callback === "function") {
+            content.populate_datalist_callback();
+         }
+         var $datalist = $("#header #datalist");
+         $datalist.css("left", $("#header #toolbar_giver_bar").position().left);
+         $datalist.css("right", $header.width() - $("#header #toolbar_giver_button").position().left);
+         autosize_datalist();
+
+         $("#header #datalist").mousedown(function(event)
+         {
+            event.preventDefault();
+         });
+
+         $("#header #datalist #datalist_add_button_text").click(function(event)
+         {
+            $("#header #toolbar_giver_button").click();
+            event.stopPropagation();
+         });
+
+         $("#header #datalist .datalist-row").mousedown(function(event)
+         {
+            event.preventDefault();
+         })
+         .click(function(event)
+         {
+            var $datalist_row = $(event.target);
+
+            if (typeof content.callback === "function") {
+               hide_datalist();
+               if ($datalist_row.hasClass("datalist-add")) {
+                  content.callback("add", $datalist_row.attr("data-object-id"));
+               }
+               else {
+                  if ($datalist_row.attr("data-list-row-id") !== undefined) {
+                     content.callback("jump", $datalist_row.attr("data-list-row-id"));
+                  }
+                  else if ($datalist_row.attr("data-heading-text") !== undefined) {
+                     content.callback("jump_heading", $datalist_row.attr("data-heading-text"));
+                  }
+               }
+            }
+         });
+
+         $("#header #datalist .datalist-row").on("click", ".icon-autocomplete", function(event)
+         {
+            autocomplete($("#header #toolbar_giver_box"), $(event.target).parent().attr("data-autocomplete-text"));
+            update_datalist(false);
+            update_clear_button();
+            update_giver_button();
+            event.stopPropagation();
+         });
+      });
+
+   </script>
+
+   <div id="datalist">
+      <% if !@datalist.nil? %>
+
+      <div class="datalist-row datalist-add icon-add link enable-hover"
+           id="datalist_add_button"
+           data-search-text="">
+         <font class="st1" id="datalist_add_button_text"><%= add_new_text %></font>
+      </div>
+
+      <% @datalist.each do |item| %>
+      <div class="datalist-row pad-autocomplete link enable-hover<%= " datalist-add icon-add" if item.datalist_list_row_id.nil? %>"
+         <% if !item.datalist_list_row_id.nil? %>
+           id="datalist_row_<%= item.datalist_list_row_id %>"
+           data-list-row-id="<%= item.datalist_list_row_id %>"
+         <% end %>
+           <%= "data-object-id=" + item.datalist_object_id.to_s   if !item.datalist_object_id.nil?   %>
+           data-search-text="<%= (item.datalist_text + (item.datalist_subtext.blank? ? "" : " " + item.datalist_subtext)).downcase %>"
+           data-autocomplete-text="<%= item.datalist_text %>">
+         <%= item.datalist_text %>
+         <% if !item.datalist_subtext.nil? %>
+         <font class="click-through st2"><%= item.datalist_subtext %></font>
+         <% end %>
+         <div class="datalist-autocomplete icon-autocomplete pad-top-medium pad-right-medium link">
+         </div>
+      </div>
+      <% end %>
+
+      <% else %>
+      <div class="hvpad">@datalist missing</div>
+      <% end %>
+   </div>

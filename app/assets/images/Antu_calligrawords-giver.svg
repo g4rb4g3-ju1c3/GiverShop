@@ -1,0 +1,20 @@
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 48 48.000001">
+<defs>
+<linearGradient id="a" x1="-123.97" gradientUnits="userSpaceOnUse" y1="73.5" gradientTransform="matrix(.45310 0 0 .43795 81.413 1018.4)" x2="-123.97" y2="-27.239">
+<stop stop-color="#c8c8c8" offset="0"/>
+<stop stop-color="#e0e0e0" offset="1"/>
+</linearGradient>
+</defs>
+<g transform="translate(0 -1004.4)">
+<path fill-rule="evenodd" fill="url(#a)" d="m4.7333 1006.4h38.533c1.5142 0 2.7333 1.2191 2.7333 2.7333v38.533c0 1.5142-1.2191 2.7333-2.7333 2.7333h-38.533c-1.5142 0-2.7333-1.2191-2.7333-2.7333v-38.533c0-1.5142 1.2191-2.7333 2.7333-2.7333"/>
+<g stroke-linejoin="round" transform="matrix(2.6662 0 0 2.6662 45.33 -1741.4)" stroke="#4c4c4c" stroke-linecap="round" fill="#4c4c4c">
+<g stroke-width=".377">
+<rect rx=".5" height="1" width="12" y="1034.4" x="-14"/>
+<rect rx=".5" height="1" width="12" y="1036.4" x="-14"/>
+</g>
+<rect rx=".5" height="1" width="6" y="1038.4" x="-14" stroke-width=".266"/>
+<rect rx=".5" height="1" width="12" y="1040.4" x="-14" stroke-width=".377"/>
+<rect rx=".5" height="1" width="6" y="1042.4" x="-14" stroke-width=".266"/>
+</g>
+</g>
+</svg>

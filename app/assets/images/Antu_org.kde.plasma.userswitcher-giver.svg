@@ -1,0 +1,11 @@
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48.000001 48.000001" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<defs>
+<linearGradient id="a" y2="-3.077" gradientUnits="userSpaceOnUse" x2="0" gradientTransform="translate(22.78 1008)" y1="43.21">
+<stop stop-color="#566069" offset="0"/>
+<stop stop-color="#6c7884" offset="1"/>
+</linearGradient>
+</defs>
+<g transform="translate(0 -1004.4)">
+<path d="m24 1004.4a24 24 0 0 0 -24 24 24 24 0 0 0 24 24 24 24 0 0 0 24 -24 24 24 0 0 0 -24 -24zm-0.04687 12.002c3.007 0 5.5957 2.0386 5.5957 5.9296 0 2.531-1.1853 5.1023-2.7363 6.6993h0.0078c-0.595 1.809 0.35681 2.2381 0.50781 2.2871h-0.0059c3.609 1.236 8.1723 4.324 8.0703 9.08h-22.787c-0.091-4.976 5.6769-8.394 7.7969-9.08 0.228-0.082 1.315-0.6736 0.70703-2.2696-1.56-1.594-2.7402-4.1758-2.7402-6.7168 0-3.892 2.574-5.9296 5.584-5.9296z" fill-rule="evenodd" fill="url(#a)"/>
+</g>
+</svg>

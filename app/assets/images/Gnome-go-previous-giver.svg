@@ -1,0 +1,13 @@
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.0" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 48 48">
+<defs>
+<linearGradient id="a" x1="30.377" gradientUnits="userSpaceOnUse" y1="11.133" gradientTransform="matrix(-1.0046 0 0 1 48.044 .0078752)" x2="11.726" y2="41.419">
+<stop stop-color="#fff" offset="0"/>
+<stop stop-color="#fff" stop-opacity="0" offset="1"/>
+</linearGradient>
+</defs>
+<g transform="translate(1.6318 -1.9627)">
+<path style="color:#000000" fill="#3465a4" stroke="#204a87" d="m24.504 9.5-19.004 16.506l19.004 16.423v-7.87h14.996v-17.055h-14.996v-8.004z"/>
+<path opacity=".35393" style="color:#000000" fill="#729fcf" d="m39.006 18.008v7.952l-32.768-0.024 17.614-15.344v7.416h15.154z"/>
+<path opacity="0.354" style="color:#000000" d="m23.433 11.641-16.516 14.386 16.516 14.2v-6.739h15.067v-14.978h-15.067v-6.869z" stroke="url(#a)" fill="none"/>
+</g>
+</svg>

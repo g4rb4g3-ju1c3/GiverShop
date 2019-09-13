@@ -1,0 +1,95 @@
+   <script type="text/javascript">
+
+      init_header({
+         page_title: "<%= render inline: escape_javascript(@vendor.name + ": Edit inventory: " + @product.description) %>",
+         title:      "<%= render inline: escape_javascript(@vendor.name) %>",
+         subtitle:   "Edit inventory",
+         edit_form:  true
+      });
+
+      function content_callback(action, data)
+      {
+         switch (action) {
+
+            case "submit":
+               $("#inventory_edit_form").submit();
+               break;
+
+            case "cancel":
+               history.back();
+               break;
+
+            case "update":
+               history.back();
+               break;
+
+            default:
+               show_error("inventory#edit content_callback: unknown action \"" + action + "\"");
+               break;
+         }
+      }
+
+   </script>
+
+   <% if !@product.blank? %>
+   <div class="list">
+<%= render partial: "shared/list_item",
+           locals: {
+              item_text:          @product.description,
+              item_subtext:       @product.size,
+              item_url:           "navigate_to('" + edit_product_path(@product.id) + "');",
+              item_notes:         @inventory.notes,
+              inventory_price:    @inventory.price,
+              inventory_location: @inventory.location
+           }
+-%>
+   </div>
+   <% end %>
+
+   <div class="hpad border-top pad-top">
+      <%= form_for "inventory",
+                   url:    vendor_inventory_path(@vendor.id, @inventory.id),
+                   method: "patch",
+                   remote: true,
+                   html:   { id: "inventory_edit_form" } do |f|
+      %>
+         <%= f.hidden_field "vendor_id"  %>
+         <%= f.hidden_field "product_id" %>
+<!--
+      <% if !@product.blank? %>
+         <%= f.hidden_field("product_id") %>
+      <% else %>
+         <%= f.label             "Product" %>&nbsp;&nbsp;&nbsp;<font class="st2 pad-left"><%= link_to "Add new product", new_product_path %></font><br>
+         <%= f.collection_select "product_id", Product.select("id, description"), :id, :description, autofocus: true %><br>
+      <% end %>
+-->
+
+         <div class="inline-block pad-right pad-bottom">
+            <%= f.label      "Price"                       %><br>
+            <%= f.text_field "price",      maxlength: 10   %>
+         </div>
+         <div class="inline-block pad-left pad-bottom">
+            <%= f.label      "Best Price"                  %><br>
+            <%= f.text_field "best_price", maxlength: 10   %>
+         </div><br>
+
+         <div class="pad-bottom">
+            <%= f.label      "Location"                             %><br>
+         <% if @datalist.nil? %>
+            <%= f.text_field "location", maxlength: 100             %><br>
+         <% else%>
+            <%= f.text_field "location", maxlength: 100,
+                                         list: "locations_datalist" %><br>
+<%= render partial: "shared/datalist_simple", locals: { datalist_id: "locations_datalist" } -%>
+         <% end %>
+         </div>
+
+         <div class="pad-bottom">
+            <%= f.label      "Inventory notes"                      %><br>
+            <%= f.text_area  "notes",    maxlength: 500             %><br>
+         </div>
+
+         <%= f.submit "", class: "hidden" %>
+      <% end -%>
+
+   </div>

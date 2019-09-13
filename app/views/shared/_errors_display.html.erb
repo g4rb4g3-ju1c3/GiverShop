@@ -1,0 +1,13 @@
+   <% if object.errors.any? %>
+<!--
+      <p class="st1">
+         Nice try, but you have a grand total of <%= object.errors.count %> fuckup<%= render inline: "s" if object.errors.count > 1 %>:
+      </p>
+-->
+      <% object.errors.full_messages.each do |msg| %>
+         <p>&bull; <%= msg %></p>
+      <% end %>
+<!--
+      <p class="st2"><%= object.errors.to_json %></p>
+-->
+   <% end %>

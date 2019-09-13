@@ -1,0 +1,19 @@
+   <script type="text/javascript">
+
+      init_header({
+         page_title: "View note: <%= render inline: escape_javascript(@note.title) %>",
+         title:      "View note",
+//         save_path:  "<%#= download_note_path(@note.id) %>"
+      });
+
+   </script>
+
+   <div class="hvpad">
+      <div class="pad-bottom">
+         <span class="h3">Title</span><br>
+         <%= text_field_tag "note_title", @note.title, readonly: true, class: "expand-x" %>
+      </div>
+      <div class="pad-bottom">
+         <%= text_area_tag "note_content", @note.content, readonly: true %>
+      </div>
+   </div>

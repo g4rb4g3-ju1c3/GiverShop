@@ -1,0 +1,137 @@
+<% if !defined? row_id               then row_id               = nil            end %>
+<% if !defined? item_checked         then item_checked         = nil            end %>
+<% if !defined? item_checked_url     then item_checked_url     = nil            end %>
+<% if !defined? item_text            then item_text            = "TEXT MISSING" end %>
+<% if !defined? item_subtext         then item_subtext         = nil            end %>
+<% if !defined? item_url             then item_url             = nil            end %>
+<% if !defined? item_priority        then item_priority        = nil            end %>
+<% if !defined? item_show_quantity   then item_show_quantity   = false          end %>
+<% if !defined? item_quantity        then item_quantity        = nil            end %>
+<% if !defined? item_notes           then item_notes           = nil            end %>
+<% if !defined? product_notes        then product_notes        = nil            end %>
+<% if !defined? inventory_price      then inventory_price      = nil            end %>
+<% if !defined? inventory_location   then inventory_location   = nil            end %>
+<% if !defined? save_url             then save_url             = nil            end %>
+<% if !defined? edit_url             then edit_url             = nil            end %>
+<% if !defined? delete_url           then delete_url           = nil            end %>
+<% if !defined? delete_param_1       then delete_param_1       = nil            end %>
+<% if !defined? delete_param_2       then delete_param_2       = nil            end %>
+      <div class="list-row"<%= (" id=\"list_row_" + row_id.to_s + "\"").html_safe if !row_id.nil? %>
+           data-search-text="<%= item_text.downcase %>">
+         <% if !item_checked.nil? %>
+         <div class="table-cell pad-right">
+            <div class="checkbox<%= item_checked ? " checked" : "" %>"
+              <%= "row_id=\"".html_safe + row_id.to_s + "\"".html_safe if !row_id.nil? %>
+              <%= "data-update-checked-url=" + item_checked_url if !item_checked_url.nil? %>>
+            </div>
+         </div>
+         <% end %>
+         <div class="table-cell expand-x">
+            <%
+            case item_priority
+               when 0
+                  item_style = "color: #CCCCCC; text-decoration: line-through;"
+                  text_style = "color: #CCCCCC;"
+               when 0..9
+                  item_style = "color: #AAAAAA;"
+                  text_style = "color: #AAAAAA;"
+               when 90..99
+                  item_style = "color: #EE7777;"
+                  text_style = "color: black;"
+               when 100
+                  item_style = "color: red; text-shadow: 0 0 .05em yellow;"
+                  text_style = "color: black;"
+               else
+                  item_style = ""
+                  text_style = ""
+            end
+            item_style = " style=\"" + item_style + "\"" if !item_style.blank?
+            text_style = " style=\"" + text_style + "\"" if !text_style.blank?
+            %>
+            <%### Item text ###%>
+            <span class="list-row-link <%= item_url.blank? ? "link-fg" : "link" %>"<%= item_style.html_safe %>
+                  data-item-id="<%= row_id %>"
+                  data-item-url="<%= item_url %>">
+               <%= item_text %>
+            </span>
+            <% if !item_subtext.blank? %>
+            <span class="st2 no-wrap"<%= text_style.html_safe %>><%= item_subtext %></span>
+            <% end %>
+            <%
+            ### Item details ###
+            info_string = ""
+            ### Line 1 ###
+            if !product_notes.blank?
+               info_string += CGI::escapeHTML(product_notes)
+            end
+            ### Line 2 ###
+            temp_string = ""
+            if !inventory_price.blank?
+               temp_string += CGI::escapeHTML(number_to_currency(inventory_price))
+            end
+            if !inventory_location.blank?
+               if !temp_string.blank?
+                  temp_string += " &bull; "
+               end
+               temp_string += CGI::escapeHTML(inventory_location)
+            end
+            if !temp_string.blank?
+               if !info_string.blank?
+                  info_string += "<br>"
+               end
+               info_string += temp_string
+            end
+            ### Line 3 ###
+            if !item_notes.blank?
+               if !info_string.blank?
+                  info_string += "<br>"
+               end
+               info_string += CGI::escapeHTML(item_notes)
+            end
+            ### Render it ###
+            %>
+            <% if !info_string.blank? %>
+            <p class="st2"<%= text_style.html_safe %>><%= render inline: info_string %></p>
+            <% end %>
+         </div>
+         <% if !save_url.blank? %>
+         <div class="table-cell pad-left valign-top">
+            <div class="icon-list icon-save link enable-hover save_button" save_url="<%= save_url %>"></div>
+         </div>
+         <% end %>
+         <% if !edit_url.blank? %>
+         <div class="table-cell pad-left valign-top">
+            <div class="icon-list icon-edit link enable-hover edit_button" edit_url="<%= edit_url %>"></div>
+         </div>
+         <% end %>
+         <% if !delete_url.blank? %>
+         <div class="table-cell pad-left valign-top">
+            <div class="icon-list icon-delete link enable-hover delete_button"
+                 delete_url="<%= delete_url %>"
+                 <%= "delete_param_1=\"".html_safe + CGI::escapeHTML(delete_param_1) + "\"".html_safe if !delete_param_1.nil? %>
+                 <%= "delete_param_2=\"".html_safe + CGI::escapeHTML(delete_param_2) + "\"".html_safe if !delete_param_2.nil? %>>
+            </div>
+         </div>
+         <% end %>
+         <% if item_show_quantity %>
+         <div class="table-cell pad-left align-right"<%= text_style.html_safe %>>
+            <% if item_quantity.blank? %>
+            <span class="link item_quantity disabled">&ndash;</span>
+            <% else %>
+            <span class="link item_quantity"><%= item_quantity %></span>
+            <% end %>
+            <%= form_for "item",
+                         url:    list_item_path(@list.id, row_id),
+                         method: "patch",
+                         remote: true,
+                         html:   { class: "item_quantity_form",
+                                   style: "display: none;" } do |f|
+            %>
+               <%= f.text_field "quantity", maxlength: 4,
+                                            class:     "item_quantity_text_field"
+               %>
+               <%= f.submit "", class: "hidden" %>
+            <% end %>
+         </div>
+         <% end %>
+      </div>

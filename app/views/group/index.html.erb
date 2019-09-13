@@ -1,0 +1,62 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         givershop.init({
+            controller:  "<%= controller_name  %>",
+            action:      "<%= action_name      %>",
+            add_path:    "<%= group_index_path %>",
+
+            title:       "Groups",
+            search_bar:  true,
+            placeholder: "New group"
+         });
+      });
+
+   </script>
+
+<%= render partial: "shared/datalist", locals: { add_new_text: "Add new group" } -%>
+
+   <div class="table list">
+   <% table_row_count = 0 %>
+   <% if @groups.any? %>
+      <% superuser = auth_su %>
+      <% @groups.each do |group| %>
+         <% owner = auth_permission(group.user_id) %>
+         <% admin = auth_permission(group.admins)  %>
+         <% user  = auth_permission(group.users)   %>
+         <% group_visible = (owner || admin || user) %>
+         <% edit_visible  = (owner || admin)         %>
+         <% if group_visible || superuser %>
+            <% table_row_count += 1 %>
+            <% su_highlight = superuser && !group_visible ? " dimmed" : "" %>
+      <div class="table-row" id="list_row_<%= group.id %>">
+         <div class="table-cell expand-x valign-top<%= su_highlight %>">
+            <%= link_to group.name, edit_group_path(group.id) %>
+            <% if !group.description.blank? %>
+               <div class="st2"><%= group.description %></div>
+            <% end %>
+         </div>
+         <% if edit_visible || superuser %>
+            <% su_highlight = superuser && !edit_visible ? " dimmed" : "" %>
+         <div class="table-cell pad-left valign-top<%= su_highlight %>">
+            <div class="icon-list icon-edit link enable-hover"
+                 onclick="navigate_to('<%= edit_group_path(group.id) %>');"></div>
+         </div>
+         <div class="table-cell pad-left valign-top<%= su_highlight %>">
+            <div class="icon-list icon-delete link enable-hover"
+                 onclick="delete_to('<%= group_path(group.id) %>',
+                                    '<p>Delete <font class=&quot;dialog-highlight&quot;><%= escape_javascript(group.name) %></font>?</p>' +
+                                    '<p>This will only remove the group.  Users and lists will not be affected.</p>' +
+                                    '<p>You can\'t undo this.</p>');">
+            </div>
+         </div>
+         <% end %>
+      </div>
+         <% end %>
+      <% end %>
+   <% end %>
+   <% if table_row_count == 0 %>
+<%= render partial: "shared/empty_list", locals: { caption: "No groups" } -%>
+   <% end %>
+   </div>

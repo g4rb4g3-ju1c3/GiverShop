@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Give'rShop</title>
+
+<%= stylesheet_link_tag    'application', 'data-turbolinks-track' => true, media: 'all' %>
+
+<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+<%= csrf_meta_tags %>
+
+</head>
+
+<body>
+
+<%= render partial: "shared/page_header" -%>
+
+<div id="body">
+
+<div id="content">
+
+<%= yield -%>
+
+</div>
+
+<div id="content_pad">
+</div>
+
+</div>
+
+<%= render partial: "shared/page_footer" -%>
+
+<div id="load_indicator" onclick="$(this).hide();">
+   <div class="click-through abs-pos expand-x" style="top: 0; bottom: 0; height: 1.3em; margin: auto;">Loading</div>
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,157 @@
+   <script type="text/javascript">
+
+      init_header({
+         page_title: "Edit product: <%= render inline: escape_javascript(@product.description) %>",
+         title:      "Edit product",
+         edit_form:  true
+      });
+
+      function content_callback(action, data)
+      {
+         switch (action) {
+
+            case "submit":
+               $("#product_edit_form").submit();
+               break;
+
+            case "cancel":
+               history.back();
+               break;
+
+            case "update":
+               history.back();
+               break;
+
+            default:
+               show_error("product#edit content_callback: unknown action \"" + action + "\"");
+               break;
+         }
+      }
+
+      function add_inventory(url)
+      {
+         $.ajax({
+            url:    url,
+            method: "post"
+         });
+      }
+
+   </script>
+
+   <% if !@product.id.nil? %>
+   <div class="list">
+<%= render partial: "shared/list_item",
+           locals: {
+              item_text:     @product.description,
+              item_subtext:  @product.size,
+              product_notes: @product.notes
+           }
+%>
+   </div>
+   <% end %>
+
+   <div class="hpad border-top pad-top">
+      <%= form_for "product",
+                   url:    product_path,
+                   method: "patch",
+                   remote: true,
+                   html:   { id: "product_edit_form" } do |f| %>
+
+         <div class="pad-bottom">
+            <%= f.label      "Description"       %><br>
+            <%= f.text_field "description",
+                             maxlength: 100      %><br>
+         </div>
+
+         <div class="pad-bottom">
+            <%= f.label      "Size"              %><br>
+            <%= f.text_field "size",
+                             maxlength: 20       %><br>
+         </div>
+
+         <div class="pad-bottom">
+            <%= f.label      "Product notes"     %><br>
+            <%= f.text_area  "notes",
+                             maxlength: 500      %><br>
+         </div>
+
+         <%= f.submit "", class: "hidden" %>
+
+      <% end %>
+   </div>
+
+   <% if @inventories.any? %>
+   <div class="table list border-top">
+   <% @inventories.each do |invitem| %>
+      <% if !invitem.id.nil? %>
+      <div class="table-row list-row">
+         <div class="table-cell expand-x">
+            <%= link_to invitem.name,
+                        edit_vendor_inventory_path(invitem.vendor_id, invitem.id)
+            %>
+         </div>
+         <div class="table-cell st1 align-right valign-middle no-wrap" style="padding-left: 1em;">
+            <% if !invitem.price.blank? %>
+               <%= number_to_currency(invitem.price) %> &gt;
+            <% else %>
+               <font class="disabled">--.-- &gt;</font>
+            <% end %>
+         </div>
+         <div class="table-cell st1 valign-middle no-wrap" style="padding-right: 1em;">
+            <% if !invitem.best_price.blank? %>
+            &nbsp;<%= number_to_currency(invitem.best_price) %>
+            <% else %>
+            &nbsp;<font class="disabled">--.--</font>
+            <% end %>
+         </div>
+         <div class="table-cell st1 valign-middle no-wrap">
+            <% if !invitem.location.blank? %>
+               <%= invitem.location %>
+            <% end %>
+         </div>
+         <div class="table-cell pad-left valign-middle">
+            <div class="icon-list icon-delete link enable-hover"
+                 onclick="delete_to('<%= vendor_inventory_path(invitem.vendor_id, invitem.id) %>',
+                                    '<p>Remove &quot;<%= escape_javascript(@product.description) %>&quot; from ' + escape_javascript(invitem.name) + ' inventory?</p>' +
+                                    '<p>This will only remove the product from the inventory, not the product itself. Price and location information will be lost.</p>' +
+                                    '<p>You can\'t undo this.</p>');">
+            </div>
+         </div>
+      <% else %>
+      <div class="list-row">
+         <div class="table-cell expand-x hpad">
+            <div class="abs-pos" style="background: url('<%= asset_path "Antu_vcs-added.svg" %>') no-repeat center; background-size: 135%; width: 1em; height: 1.25em;"></div>
+            <%= link_to invitem.name,
+                        vendor_inventory_index_path(invitem.vendor_id, product_id: @product.id),
+                        method:   "post",
+                        remote:   true,
+                        navigate: false,
+                        style:    "padding-left: 1.25em;"
+            %>
+         </div>
+      <% end %>
+      </div>
+   <% end %>
+   </div>
+   <% end %>
+   <div class="list-row border-bottom hpad">
+      <%= form_for "vendor",
+                   url:    vendor_index_path,
+                   method: "post",
+                   remote: true,
+                   html:   { id: "new_vendor_form" } do |f|
+      %>
+         <div class="abs-pos" style="background: url('<%= asset_path "Antu_vcs-added.svg" %>') no-repeat center; background-size: 135%; width: 1em; height: 1.5em;"></div>
+         <%= f.text_field "name",
+                          style:       "width: auto; margin-bottom: .5em; margin-left: 1.25em;",
+                          placeholder: "New vendor",
+                          oninput:     "$('#add_vendor_button').prop('disabled', this.value.trim() == ''); $('#external_add_vendor_button').prop('disabled', this.value.trim() == '');"
+         %>
+         <%= f.submit     "",
+                          class:       "hidden" %>
+         <%= button_tag   "Add",
+                          id:          "external_add_vendor_button",
+                          disabled:    true,
+                          onclick:     "$('#new_vendor_form').submit();" %>
+      <% end %>
+   </div>

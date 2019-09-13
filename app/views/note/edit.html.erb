@@ -1,0 +1,84 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         givershop.init({
+            controller:  "<%= controller_name %>",
+            action:      "<%= action_name     %>",
+
+            page_title: "Edit note: <%= render inline: escape_javascript(@note.title) %>",
+            title:      "Edit note",
+            edit_form:  true
+//            save_path:  "<%= download_note_path(@note.id) %>"
+         });
+      });
+
+   </script>
+
+   <%= form_for "note",
+                url:    note_path,
+                method: "patch",
+                remote: true,
+                html:   { id: "note_edit_form" } do |f|
+   %>
+      <div class="hvpad">
+         <div>
+            <%= f.label      "Title"                       %>
+            <%= f.text_field "title",       maxlength: 100 %>
+         </div>
+         <div class="pad-bottom">
+            <%= f.label      "Description"                 %>
+            <%= f.text_field "description", maxlength: 100 %>
+         </div>
+         <div class="pad-bottom">
+            <div class="checkbox checked" id="autosave_enabled"></div> Autosave
+            <span class="st1 disabled" id="autosave_timeout"></span>
+         </div>
+            <%= f.text_area  "content"                     %>
+      </div>
+
+      <%= f.submit "", class: "hidden" %>
+      <%= hidden_field_tag "update_action", "" %>
+   <% end %>
+
+   <div class="hpad pad-bottom">
+      <%= label_tag "", "Share note", class: "link", onclick: "$('#share_note').toggleClass('hidden');" %>
+      <div class="expand-x hidden" id="share_note">
+         <%= form_for "",
+                      url:    share_note_path,
+                      method: "post",
+                      remote: true,
+                      html:   { id: "share_ntoe_form" } do |share_form|
+         %>
+            <%= share_form.label      "Enter an email address" %>
+            <%= share_form.text_field "email_address",
+                                      maxlength: 254 %>
+            <%= button_tag   "Invite",
+                             id:      "share_invite_button",
+                             onclick: "$('#share_note_form').submit();" %>
+            <%= share_form.submit "", class: "hidden" %>
+         <% end %>
+      </div>
+   </div>
+
+   <% if @users.any? %>
+   <%= label_tag "", "Select permissions", class: "hpad" %>
+      <div class="table list border-top border-bottom" id="users_list">
+         <% @users.each do |user| %>
+         <div class="table-row">
+            <div class="table-cell expand-x">
+               <div>
+                  <span class="link user-name" onclick="$('#permissions_<%= user.id.to_s %>').toggleClass('hidden');"><%= user.name %></span>
+                  <% if auth_su %>
+                  <span class="st2 link" onclick="navigate_to('<%= edit_user_path(user.id) %>', null);">Edit user</span>
+                  <% end %>
+               </div>
+               <div class="pad-top hidden" id="permissions_<%= user.id %>" data-user_id="<%= user.id %>">
+                  <div class="checkbox list-edit<%=   auth_permission(user, "NE")  ? " checked" : "" %>"></div> Note: Edit<br>
+                  <div class="checkbox list-delete<%= auth_permission(user, "ND")  ? " checked" : "" %>"></div> Note: Delete<br>
+               </div>
+            </div>
+         </div>
+         <% end %>
+      </div>
+   <% end %>

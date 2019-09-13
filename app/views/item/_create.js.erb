@@ -1,0 +1,74 @@
+
+
+
+   clear_giver_box();
+   update_giver_button();
+   hide_datalist();
+   datalist_set_row_state("<%= @item.product_id %>", true, "<%= @item.id %>");
+   hide_errors();
+   content.toggle_quick_edit(null, null, true);
+
+   var item_location = "<%= escape_javascript(@item.location) %>";
+   var $heading_row  = null;
+   var new_heading   = "<%= escape_javascript(render partial: "shared/list_heading",
+                          locals: {
+                             location_id: "",
+                             location:    @item.location
+                          })
+                       -%>";
+
+   if ($("#items_list").length == 0) {
+      $("#items_list #empty_list").hide();
+   }
+
+   $("#items_list .list-heading").each(function(i, element) {
+      if (item_location <= $(element).attr("data-heading-text")) {
+         if (item_location == $(element).attr("data-heading-text")) {
+            $heading_row = $(element);
+         }
+         else {
+            $(element).before(new_heading);
+            $heading_row = $(element).prev();
+         }
+         return false;
+      }
+   });
+   if ($heading_row == null) {
+      $("#items_list").append(new_heading);
+      $heading_row = $("#items_list .list-heading").last();
+   }
+
+   $heading_row.nextUntil(".list-heading", ".list-row").each(function(i, element) {
+      if ("<%= @item.description.downcase %>" > $(element).attr("data-search-text")) {
+         $heading_row = $(element).next();
+      }
+      else {
+         return false;
+      }
+   });
+
+   $heading_row.after(
+   "<%= escape_javascript(render partial: "shared/list_item",
+      locals: {
+         row_id:            @item.id,
+         item_text:         @item.description,
+         item_subtext:      @item.size,
+         item_url:          quick_edit_list_item_path(@item.list_id, @item.id, vendor_id: @item.vendor_id.to_s),
+         item_checked:      @item.checked,
+         item_checked_url:  update_checked_list_item_path(@item.list_id, @item.id),
+         item_priority:     @item.priority,
+         item_quantity:     @item.quantity,
+         item_notes:        @item.notes,
+         product_notes:     @item.product_notes,
+         inventory_price:   @item.price
+      })
+   -%>
+   <%= escape_javascript(render partial: "list/list_item_quick_edit",
+      locals: { row_id: @item.id })
+   -%>
+   ");
+
+   jump_to_row("<%= @item.id %>");
+
+
+

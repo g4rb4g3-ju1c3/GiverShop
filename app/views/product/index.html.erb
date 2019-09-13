@@ -1,0 +1,197 @@
+   <script type="text/javascript">
+
+      init_header({
+         title:       "Products",
+         subtitle:    "What you need",
+         search_bar:  true,
+         placeholder: "New product"
+      });
+
+      $(document).ready(function()
+      {
+         update_form_controls();
+
+         $(".checkbox").click(function(event) {
+            toggle_checked($(event.target));
+         });
+
+         $("#select_all").click(function(event) {
+            check_all($(event.target), $("#products_list"));
+            update_form_controls();
+         });
+
+         $("#products_list .checkbox").click(function(event) {
+            update_form_controls();
+         });
+
+         $("#products_list .edit_button").click(function(event) {
+            navigate_to($(event.target).attr("edit_url"));
+         });
+
+         $("#products_list .delete_button").click(function(event) {
+            delete_to(
+               $(event.target).attr("delete_url"),
+               "<p>Delete <font class=\"dialog-highlight\">" + $(event.target).attr("delete_param_1") + "</font>?</p>" +
+               "<p>This will delete the product and remove it from all lists and vendor inventories.</p>" +
+               "<p>You can\'t undo this.</p>"
+            );
+         });
+
+         $("#products_form").on("submit", function()
+         {
+            hide_errors();
+            $("#id_list").val(get_checked_id_list($("#products_list"), null, "row_id"));
+         });
+      });
+
+      function content_callback(action, data)
+      {
+         switch (action) {
+
+            case "jump":
+               jump_to_element(data);
+               break;
+
+            case "submit":
+               $.ajax({
+                  url:    "<%= product_index_path %>",
+                  method: "post",
+                  data: {
+                     add_text: data
+                  },
+                  error: ajax_error_handler
+               });
+               break;
+
+            case "create":
+               refresh_list(data);
+               break;
+
+            case "destroy":
+               delete_list_row(data);
+               break;
+
+            case "destroy_multiple":
+               refresh_content();
+               break;
+
+            default:
+               show_error("product#index content_callback: unknown action \"" + action + "\"");
+               break;
+         }
+      }
+
+      function update_form_controls()
+      {
+         var disabled = (!any_checked($("#products_list")));
+
+         $("#external_submit").prop("disabled", disabled);
+         $("#delete")         .prop("disabled", disabled);
+      }
+
+      function delete_selected()
+      {
+         var $products_list = $("#products_list");
+         var selected_count = get_checked_count($products_list);
+
+         if (selected_count > 0) {
+            hide_errors();
+            show_dialog("Delete " + selected_count + " selected product" + (selected_count == 1 ? "" : "s") + "?", {
+               delete_button: function()
+               {
+                  $.ajax({
+                     url:    "<%= product_path("multiple", id_list: "") %>" + get_checked_id_list($products_list, null, "row_id"),
+                     method: "delete",
+                     // data not working on BB10:
+//                     data:   { id_list: get_checked_id_list($products_list, null, "product_id") },
+                     error: function(xhr, status, error) {
+                        show_error(xhr.responseText != null? xhr.responseText : xhr.status + ": " + xhr.statusText);
+                     }
+                  });
+               },
+               cancel_button: true
+            });
+         }
+      }
+
+   </script>
+
+<%= render partial: "shared/datalist", locals: { add_new_text: "Add new product" } -%>
+
+   <% if @products.any? %>
+   <div class="hvpad">
+      <%= form_for "",
+                   url:    product_path("multiple"),
+                   method: "patch",
+                   remote: true,
+                   html:   { id: "products_form" } do |f|
+      %>
+         <%= f.hidden_field "id_list",
+                            id: "id_list" %>
+
+         <div class="pad-bottom">
+            <%= f.label         "Vendor"              %><br>
+            <%= f.select        "vendor_id",
+                                options_from_collection_for_select(Vendor.all.order("name"), "id", "name") %>
+         </div>
+
+      <%= fields_for Inventory.new do |inv_form| %>
+         <div class="pad-bottom">
+            <%= inv_form.label      "Location"            %><br>
+            <%= inv_form.text_field "location",
+                                    maxlength: 100,
+                                    class:     "expand-x" %>
+         </div>
+      <% end %>
+
+         <%= f.submit "",
+                      class: "hidden",
+                      id:    "submit"
+         %>
+      <% end %>
+      <%= button_tag  "Save to selected",
+                      class:   "float-right",
+                      id:      "external_submit",
+                      onclick: "$('#products_form #submit').submit();"
+      %>
+      <%= button_tag  "Delete selected",
+                      type:    "button",
+                      id:      "delete",
+                      name:    "delete",
+                      onclick: "delete_selected();"
+      %>
+   </div>
+
+   <div class="list border-top">
+      <div class="list-row">
+         <div class="table-cell pad-right">
+            <div class="checkbox" id="select_all"></div>
+         </div>
+         <div class="table-cell expand-x">
+            Select all
+         </div>
+      </div>
+   </div>
+
+   <div class="list border-top border-bottom" id="products_list">
+
+      <% @products.each do |product| %>
+<%= render partial: "shared/list_item",
+           locals: {
+              row_id:         product.id,
+              item_checked:   false,
+              item_text:      product.description,
+              item_subtext:   product.size,
+              item_url:       "navigate_to('" + edit_product_path(product.id) + "');",
+              product_notes:  product.notes,
+              edit_url:       edit_product_path(product.id),
+              delete_url:     product_path(product.id),
+              delete_param_1: product.description
+           }
+-%>
+      <% end %>
+
+   </div>
+   <% else %>
+<%= render partial: "shared/empty_list", locals: { caption: "No products" } -%>
+   <% end %>

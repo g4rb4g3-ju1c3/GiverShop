@@ -1,0 +1,79 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         givershop.init({
+            controller:  "<%= controller_name                %>",
+            action:      "<%= action_name                    %>",
+            list_id:     "<%= @list.id                       %>",
+            vendor_id:   "<%= @vendor_id                     %>",
+            add_path:    "<%= list_item_index_path(@list.id) %>",
+            list_path:   "<%= list_path(@list.id)            %>",
+
+            title:       "<%= escape_javascript(@list.name)  %>",
+            subtitle:    "<%= escape_javascript(@list.notes) %>",
+            search_bar:  true,
+            placeholder: "Add or find list item"
+         });
+      });
+
+   </script>
+
+<%= render partial: "shared/datalist", locals: { add_new_text: "Add to list" } -%>
+
+   <div class="hvpad border-bottom align-center">
+      <div class="align-right" style="display: inline-block;">
+
+         <% if !@vendor_id.nil? %>
+         <div class="st1 pad-bottom-medium">
+            Organize by
+            <%= select_tag "select_vendor", options_from_collection_for_select(@vendors, "id", "name", @vendor_id) %>
+         </div>
+         <div class="pad-bottom-medium">
+            <% hide_misc_items = (session[:hide_misc_items] == true) %>
+            <font class="st1">Only show items here</font>
+            <div class="checkbox valign-middle<%= hide_misc_items    ? " checked" : "" %>" id="hide_misc_items"></div>
+         </div>
+         <% end %>
+         <div>
+            <% hide_checked_items = (session[:hide_checked_items] == true) %>
+            <font class="st1">Hide checked items</font>
+            <div class="checkbox valign-middle<%= hide_checked_items ? " checked" : "" %>" id="hide_checked_items"></div>
+         </div>
+
+      </div>
+   </div>
+
+   <div class="list" id="items_list">
+   <% if @items.any? %>
+      <% current_location = "" %>
+      <% @items.each do |item| %>
+         <% location = (item.location.blank? ? "Miscellaneous" : item.location) %>
+         <% if location != current_location %>
+            <% current_location = location %>
+<%= render partial: "shared/list_heading", locals: { heading: location } -%>
+         <% end %>
+
+<%= render partial: "shared/list_item",
+           locals: {
+              row_id:             item.id,
+              item_url:           quick_edit_list_item_path(@list.id, item.id, vendor_id: @vendor_id.to_s),
+              item_checked:       item.checked,
+              item_checked_url:   list_item_path(@list.id, item.id),
+              item_text:          item.description,
+              item_subtext:       item.size,
+              item_priority:      item.priority,
+              item_quantity:      item.quantity,
+              item_show_quantity: true,
+              item_notes:         item.notes,
+              product_notes:      item.product_notes,
+              inventory_price:    item.price
+           }
+-%>
+<%= render partial: "list_item_quick_edit", locals: { row_id: item.id } -%>
+      <% end %>
+<%= render partial: "shared/empty_list", locals: { caption: "No num nums", hidden: true  } -%>
+   <% else %>
+<%= render partial: "shared/empty_list", locals: { caption: "No num nums", hidden: false } -%>
+   <% end %>
+   </div>

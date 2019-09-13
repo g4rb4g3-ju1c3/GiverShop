@@ -1,0 +1,15 @@
+
+
+
+   $("#errorbar #error_message").html(
+      "<%= escape_javascript(render partial: "shared/errors_display",
+                                    locals: { object: @error_object }) %>"
+   );
+   $("#errorbar").show();
+   autosize_body();
+   <% if defined? @existing_item %>
+      jump_to_row(<%= @existing_item.id %>);
+   <% end %>
+
+
+

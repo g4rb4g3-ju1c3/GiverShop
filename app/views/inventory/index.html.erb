@@ -1,0 +1,230 @@
+   <script type="text/javascript">
+
+      init_header({
+         page_title:  "<%= render inline: escape_javascript(@vendor.name) + " inventory" %>",
+         title:       "<%= render inline: escape_javascript(@vendor.name) %>",
+         subtitle:    "Inventory",
+         search_bar:  true,
+         placeholder: "Add product"
+      });
+
+      $(document).ready(function()
+      {
+         update_form_controls();
+
+         $(".checkbox").click(function(event) {
+            toggle_checked($(event.target));
+         });
+
+         $("#select_all").click(function(event) {
+            check_all($(event.target), $("#inventory_list"));
+            update_form_controls();
+         });
+
+         $("#inventory_list .checkbox").click(function(event) {
+            update_form_controls();
+         });
+
+         $("#inventory_list .delete_button").click(function(event) {
+            delete_to(
+               $(event.target).attr("delete_url"),
+               "<p>Remove <font class=\"dialog-highlight\">" + $(event.target).attr("delete_param_1") + "</font> " +
+               "from <font class=\"dialog-highlight\">" + $(event.target).attr("delete_param_2") + "</font> inventory?</p>" +
+               "<p>This will only remove the product from the inventory, not the product itself. Price and location information will be lost.</p>" +
+               "<p>You can\'t undo this.</p>"
+            );
+         });
+
+         $("#inventory_form").on("submit", function() {
+            hide_errors();
+            $("#id_list").val(get_checked_id_list($("#inventory_list"), null, "row_id"));
+         });
+      });
+
+      function content_callback(action, data)
+      {
+         switch (action) {
+
+            case "jump":
+               jump_to_element(data);
+               break;
+
+            case "jump_search":
+               $("#inventory_list").children().each(function(i, element) {
+                  if ($(element).attr("data-seach-text") == data) {
+                     jump_to_element($(element).attr("id"));
+                     return false;
+                  }
+               });
+               break;
+
+            case "add":
+            case "submit":
+               $.ajax({
+                  url:    "<%= vendor_inventory_index_path(@vendor) %>",
+                  method: "post",
+                  data: {
+                     product_id: (action == "add"    ? data : null),
+                     add_text:   (action == "submit" ? data : null)
+                  },
+                  error: ajax_error_handler
+               });
+               break;
+
+            case "create":
+               refresh_list(data);
+               break;
+
+            case "update":
+               refresh_content();
+               break;
+
+            case "destroy":
+               delete_list_row(data);
+               break;
+
+            case "destroy_multiple":
+               refresh_content();
+               break;
+
+            default:
+               show_error("inventory#index content_callback: unknown action \"" + action + "\"");
+               break;
+         }
+      }
+
+      function populate_datalist_callback()
+      {
+         $("#inventory_list .list-heading").each(function(i, element) {
+            add_heading_to_datalist($(element));
+         });
+      }
+
+      function update_form_controls()
+      {
+         var disabled = (!any_checked($("#inventory_list")));
+
+         $("#external_submit").prop("disabled", disabled);
+         $("#delete")         .prop("disabled", disabled);
+      }
+
+      function delete_selected()
+      {
+         var $inventory_list = $("#inventory_list");
+         var selected_count  = get_checked_count($inventory_list);
+
+         if (selected_count > 0) {
+            hide_errors();
+            show_dialog("Delete " + selected_count + " selected inventory item" + (selected_count == 1 ? "" : "s") + "?", {
+               delete_button: function()
+               {
+                  $.ajax({
+                     url:    "<%= vendor_inventory_path(@vendor.id, "multiple", id_list: "") %>" + get_checked_id_list($inventory_list, null, "row_id"),
+                     method: "delete",
+                     // data not working on BB10:
+//                     data:   { id_list: get_checked_id_list($inventory_list, null, "inventory_id") }
+                     error: function(xhr, status, error) {
+                        show_error(xhr.responseText != null? xhr.responseText : xhr.status + ": " + xhr.statusText);
+                     }
+                  });
+               },
+               cancel_button: true
+            });
+         }
+      }
+
+   </script>
+
+<%= render partial: "shared/datalist", locals: { add_new_text: "Add new product and inventory item" } -%>
+
+   <% if @inventory.any? %>
+   <div class="hvpad">
+      <%= form_for "",
+                   url:    vendor_inventory_path(@vendor.id, "multiple"),
+                   method: "patch",
+                   remote: true,
+                   html:   { id: "inventory_form" } do |f|
+      %>
+         <%= f.hidden_field "id_list", id: "id_list" %>
+
+         <%= fields_for Inventory.new do |inv_form| %>
+         <div class="inline-block pad-right pad-bottom">
+            <%= inv_form.label      "Price"               %><br>
+            <%= inv_form.text_field "price",
+                                    maxlength: 10         %>
+         </div>
+         <div class="inline-block pad-left pad-bottom">
+            <%= inv_form.label      "Best Price"          %><br>
+            <%= inv_form.text_field "best_price",
+                                    maxlength: 10         %>
+         </div><br>
+
+         <div class="pad-bottom">
+            <%= inv_form.label      "Location"            %><br>
+            <%= inv_form.text_field "location",
+                                    maxlength: 100,
+                                    class:     "expand-x" %>
+         </div>
+         <% end %>
+
+         <%= f.submit "",
+                      class: "hidden",
+                      id:    "submit"
+         %>
+      <% end %>
+      <%= button_tag  "Save to selected",
+                      class:   "float-right",
+                      id:      "external_submit",
+                      onclick: "$('#inventory_form #submit').submit();"
+      %>
+      <%= button_tag  "Delete selected",
+                      type:    "button",
+                      id:      "delete",
+                      name:    "delete",
+                      onclick: "delete_selected();"
+      %>
+   </div>
+
+   <div class="table list border-top">
+      <div class="table-row">
+         <div class="table-cell pad-right">
+            <div class="checkbox" id="select_all"></div>
+         </div>
+         <div class="table-cell expand-x">
+            Select all
+         </div>
+      </div>
+   </div>
+
+   <div class="list border-top border-bottom" id="inventory_list">
+
+      <% current_location = "" %>
+      <% @inventory.each do |invitem| %>
+         <% location = (invitem.location.blank? ? "Miscellaneous" : invitem.location) %>
+         <% if location != current_location %>
+            <% current_location = location %>
+<%= render partial: "shared/list_heading", locals: { heading: location } -%>
+         <% end %>
+
+<%= render partial: "shared/list_item",
+           locals: {
+              row_id:          invitem.product_id,
+              item_checked:    false,
+              item_text:       invitem.description,
+              item_subtext:    invitem.size,
+              item_url:        "navigate_to('" + edit_vendor_inventory_path(@vendor, invitem) + "');",
+              item_notes:      invitem.notes,
+              product_notes:   invitem.product_notes,
+              inventory_price: invitem.price,
+              delete_url:      vendor_inventory_path(@vendor, invitem.id),
+              delete_param_1:  invitem.description,
+              delete_param_2:  @vendor.name
+           }
+-%>
+      <% end %>
+
+   <% else %>
+   <div class="table list">
+<%= render partial: "shared/empty_list", locals: { caption: "No inventory" } -%>
+   <% end %>
+   </div>

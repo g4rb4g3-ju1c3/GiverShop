@@ -1,0 +1,1266 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+
+
+$ref-size:             <%= "1" %>cm;
+$body-width:           $ref-size * 30;
+
+$font-face:            Tahoma, Verdana, Geneva, sans-serif;
+$font-size:            $ref-size;
+$font-face-monospaced: Courier New, monospaced;
+$font-size-monospaced: $ref-size / 2;
+
+$bg-color:             #404040;
+$content-bg-color:     #FAFAFA;
+$text-color:           #4C4C4C;
+$disabled-text-color:  #CCCCCC;
+
+$control-border-color: #CCCCCC;
+$control-bg-color:     white;
+$hover-bg-color:       #FAFAFA;
+
+$border-color:         #CCCCCC;
+$border-size:          $ref-size  / 10;
+$menu-border-size:     $ref-size  /  2;
+
+$pad-border:           $font-size / 10;
+$pad-thin:             $font-size /  8;
+$pad-medium:           $font-size /  4;
+$pad-normal:           $font-size /  2;
+//$pad-thick:            $font-size;
+
+$link-fg-color:        #7070D0;
+$error-color:          red;
+$important-color:      red;
+$highlight-color:      #FFFFE0;
+
+$list-bg-color:        white;
+$list-heading-color:   #407040;
+
+$dialogbox-bg-color:   white;
+$dialogbox-fg-color:   $text-color;
+
+$errorbar-bg-color:    #FFC3C3;
+$errorbar-fg-color:    black;
+
+
+/*** NORMALIZE? ***/
+
+/*
+* {
+   margin:  0;
+   padding: 0;
+}
+*/
+
+
+
+/*************/
+/*** DEBUG ***/
+/*************/
+
+.debug {
+   border: 1px solid red !important;
+}
+
+.debug.yellow {
+   border: 1px solid yellow !important;
+}
+
+.debug-green {
+   border: 1px solid green !important;
+}
+
+
+
+/*************************/
+/*** GLOBAL EVERYTHING ***/
+/*************************/
+
+html {
+   height:  100%;
+}
+
+body {
+   height:  100%;
+   margin:  0;
+   padding: 0;
+   background-color: $bg-color;
+   color:            $text-color;
+   font:             normal $font-size $font-face;
+}
+
+p {
+   margin: 0;
+}
+
+a {
+   color:           $link-fg-color;
+   text-decoration: none;
+}
+
+hr {
+   margin: $pad-medium 0;
+   border: ($border-size / 2) solid $border-color;
+}
+
+div {
+   box-sizing: border-box;
+   font:       inherit;
+}
+
+
+
+/**********************/
+/*** GLOBAL CLASSES ***/
+/**********************/
+
+.click-through {
+   pointer-events: none;
+}
+
+.noclip {
+   overflow: visible;
+}
+
+.hidden, div.toolbar-button.hidden {
+   display: none !important;
+}
+
+.fixed-pos {
+   position: fixed;
+}
+
+.abs-pos {
+   position: absolute;
+}
+
+.rel-pos {
+   position: relative;
+}
+
+.top {
+   top:    0;
+}
+
+.bottom {
+   bottom: 0;
+}
+
+.left {
+   left:   0;
+}
+
+.right {
+   right:  0;
+}
+
+.inline {
+   display: inline;
+}
+
+.expand-x {
+   width:  100%;
+}
+
+.expand-y {
+   height: 100%;
+}
+
+.expand {
+   width:  100%;
+   height: 100%;
+}
+
+.inline-block {
+   display: inline-block;
+}
+
+.block {
+   display: block;
+}
+
+.float-left {
+   display: block;
+   float:   left;
+}
+
+.float-right {
+   display: block;
+   float:   right;
+}
+
+/*
+.clear-left {
+   clear: left;
+}
+
+.clear-right {
+   clear: right;
+}
+
+.clear-both {
+   clear: both;
+}
+*/
+
+.align-left {
+   text-align: left;
+}
+
+.align-center {
+   text-align: center;
+}
+
+.align-right {
+   text-align: right;
+}
+
+.valign-top {
+   vertical-align: top;
+}
+
+.valign-middle {
+   vertical-align: middle;
+}
+
+.valign-bottom {
+   vertical-align: bottom;
+}
+
+.no-wrap {
+   white-space: nowrap;
+}
+
+.truncate {
+   white-space: nowrap;
+   overflow:    hidden;
+}
+
+.ellipsis {
+   text-overflow: ellipsis;
+}
+
+
+
+.h1 {
+   font-size:   125%;
+   font-weight: bold;
+}
+
+.h2 {
+   @extend .h1;
+   font-size:   100%;
+}
+
+.h3 {
+   @extend .h1;
+   font-size:   75%;
+}
+
+.h4 {
+   @extend .h1;
+   font-size:   50%;
+}
+
+
+
+.st1 {
+   font-size: 75%;
+}
+
+.st2 {
+   font-size: 50%;
+}
+
+.st3 {
+   font-size: 35%;
+}
+
+
+
+.link-fg {
+   color:  $link-fg-color;
+}
+
+.link {
+   @extend .link-fg;
+   cursor: pointer;
+}
+
+.enable-hover:hover {
+   background-color: $hover-bg-color;
+}
+
+.important {
+   color: $important-color;
+}
+
+.error {
+   color: $error-color;
+}
+
+.dimmed {
+   opacity: 0.5;
+}
+
+.disabled {
+   color: $disabled-text-color;
+}
+
+.dialog-highlight {
+   color: $link-fg-color;
+}
+
+.highlight {
+   background-color: $highlight-color !important;
+}
+
+
+
+@mixin mirror {
+   transform:         scaleX(-1);
+   -moz-transform:    scaleX(-1);
+   -webkit-transform: scaleX(-1);
+   -o-transform:      scaleX(-1);
+   -ms-transform:     scaleX(-1);
+}
+
+@mixin flip {
+   transform:         scaleY(-1);
+   -moz-transform:    scaleY(-1);
+   -webkit-transform: scaleY(-1);
+   -o-transform:      scaleY(-1);
+   -ms-transform:     scaleY(-1);
+}
+
+@mixin scale-y($factor) {
+   transform:         scaleY($factor);
+   -moz-transform:    scaleY($factor);
+   -webkit-transform: scaleY($factor);
+   -o-transform:      scaleY($factor);
+   -ms-transform:     scaleY($factor);
+}
+
+@mixin rotate($angle) {
+   transform:         rotate($angle);
+   -moz-transform:    rotate($angle);
+   -webkit-transform: rotate($angle);
+   -o-transform:      rotate($angle);
+   -ms-transform:     rotate($angle);
+}
+
+.rotate90 {
+   @include rotate(90deg);
+}
+
+.rotate180 {
+   @include rotate(180deg);
+}
+
+.rotate270, .rotate-90 {
+   @include rotate(270deg);
+}
+
+
+
+.hvpad {
+   padding:        $pad-normal;
+}
+.hvpad-medium {
+   padding:        $pad-medium;
+}
+.hvpad-border {
+   padding:        $pad-border;
+}
+
+.hpad {
+   padding-left:   $pad-normal;
+   padding-right:  $pad-normal;
+}
+.hpad-medium {
+   padding-left:   $pad-medium;
+   padding-right:  $pad-medium;
+}
+.hpad-border {
+   padding-left:   $pad-border;
+   padding-right:  $pad-border;
+}
+
+.vpad {
+   padding-top:    $pad-normal;
+   padding-bottom: $pad-normal;
+}
+.vpad-medium {
+   padding-top:    $pad-medium;
+   padding-bottom: $pad-medium;
+}
+.vpad-border {
+   padding-top:    $pad-border;
+   padding-bottom: $pad-border;
+}
+
+.pad-top {
+   padding-top:    $pad-normal;
+}
+.pad-top-medium {
+   padding-top:    $pad-medium;
+}
+.pad-top-border {
+   padding-top:    $pad-border;
+}
+
+.pad-bottom {
+   padding-bottom: $pad-normal;
+}
+.pad-bottom-medium {
+   padding-bottom: $pad-medium;
+}
+.pad-bottom-border {
+   padding-bottom: $pad-border;
+}
+
+.pad-left {
+   padding-left:   $pad-normal;
+}
+.pad-left-medium {
+   padding-left:   $pad-medium;
+}
+.pad-left-border {
+   padding-left:   $pad-border;
+}
+
+.pad-right {
+   padding-right:  $pad-normal;
+}
+.pad-right-medium {
+   padding-right:  $pad-medium;
+}
+.pad-right-border {
+   padding-right:  $pad-border;
+}
+
+
+
+.border-top {
+   border-top:    $border-size solid $border-color;
+}
+
+.border-bottom {
+   border-bottom: $border-size solid $border-color;
+}
+
+.border-left {
+   border-left:   $border-size solid $border-color;
+}
+
+.border-right {
+   border-right:  $border-size solid $border-color;
+}
+
+.control-border-top {
+   border-top:    $border-size solid $control-border-color;
+}
+
+.control-border-bottom {
+   border-bottom: $border-size solid $control-border-color;
+}
+
+.control-border-left {
+   border-left:   $border-size solid $control-border-color;
+}
+
+.control-border-right {
+   border-right:  $border-size solid $control-border-color;
+}
+
+
+
+.table {
+   display: table;
+}
+
+.table-row {
+   display: table-row;
+}
+
+.table-cell {
+   display: table-cell;
+}
+
+
+
+.list {
+   display: table;
+   width: 100%;
+   background-color: $list-bg-color;
+
+   .table-row,
+   .list-row {
+      .table-cell {
+         padding-top:    $pad-thin;
+         padding-bottom: $pad-thin;
+      }
+   }
+   .table-row:first-child,
+   .list-row:first-child {
+      .table-cell {
+         padding-top:    $pad-normal;
+         padding-bottom: $pad-thin;
+      }
+   }
+   .table-row:last-child,
+   .list-row:last-child {
+      .table-cell {
+         padding-top:    $pad-thin;
+         padding-bottom: $pad-normal;
+      }
+   }
+   .table-row:only-child,
+   .list-row:only-child {
+      .table-cell {
+         padding-top:    $pad-normal;
+         padding-bottom: $pad-normal;
+      }
+   }
+
+   .table-cell:first-child {
+      padding-left:   $pad-normal;
+   }
+   .table-cell:last-child {
+      padding-right:  $pad-normal;
+   }
+}
+
+.list-row {
+   background-color: $list-bg-color;
+}
+
+.list-row-quick-edit {
+   overflow-x:       auto;
+   background-color: $content-bg-color;
+}
+
+.list-heading {
+   height:           1.75em;
+   line-height:      1.6em;
+   background-color: $content-bg-color;
+   background:       linear-gradient(to right, $list-bg-color, #EEEEEE);
+   color:            $list-heading-color;
+}
+
+.list-bg {
+   background-color: $list-bg-color;
+}
+
+
+
+.checkbox {
+   cursor:   pointer;
+   display:  inline-block;
+   position: relative;
+   top:      -.035em;
+   width:    1.15em;
+   height:   1.15em;
+   padding:          .1em;
+   border:           $border-size solid $control-border-color;
+   background-color: white;
+   vertical-align:   bottom;
+   overflow:         hidden;
+}
+
+.checkbox.checked {
+   background:       $content-bg-color url('Antu_games-endturn.svg') no-repeat center 30%;
+   background-size:  120%;
+}
+
+.checkbox.disabled {
+   cursor:           default;
+}
+
+
+
+#header {
+   z-index:    2;
+   position:   fixed;
+   top:        0;
+   left:       0;
+   right:      0;
+   width:      100%;
+   height:     auto;
+   max-width:  $body-width;
+   margin:     0 auto;
+   background-color: $content-bg-color;
+
+   #titlebar {
+      width:  100%;
+      height: 2.5em;
+      padding-right: 2.5em;
+      border-bottom: $border-size solid $control-border-color;
+   }
+
+   #main_toolbar {
+      width: 100%;
+      border-bottom: $border-size solid $control-border-color;
+
+      #toolbar_giver_box {
+         padding-right:   2.1em;
+      }
+   }
+
+   #toolbar_clear_button {
+      top:    0;
+      right:  0;
+      bottom: 0;
+      width:  2.1em;
+      background-size:     1.5em;
+      background-position: center;
+   }
+
+   #toolbar_clear_button.disabled,
+   #toolbar_giver_button.disabled,
+   #datalist_add_button.disabled {
+      cursor:  default;
+      opacity: 0.25;
+   }
+}
+
+#body {
+   z-index:    0;
+   position:   fixed;
+   overflow-y: auto;
+   left:       0;
+   right:      0;
+   width:      100%;
+   max-width:  $body-width;
+   margin:     0 auto;
+   background-color: $content-bg-color;
+   -webkit-overflow-scrolling: touch;
+}
+
+#footer {
+   z-index:    1;
+   position:   fixed;
+   box-sizing: content-box;
+   left:       0;
+   right:      0;
+   bottom:     0;
+   width:      100%;
+   height:     auto;
+   max-width:  $body-width;
+   margin:     0 auto;
+   background-color: $content-bg-color;
+
+   #nav_toolbar {
+      width:       100%;
+      border-top:  $border-size solid $control-border-color;
+      text-align:  center;
+      line-height: 0;
+
+      div {
+         display: inline-block;
+      }
+   }
+
+   #errorbar {
+      cursor:           default;
+      display:          none;
+      position:         relative;
+      top:              0;
+      right:            0;
+      min-height:       1.8em;
+      overflow-y:       auto;
+      border-top:       $border-size solid $border-color;
+      background-color: $errorbar-bg-color;
+      color:            $errorbar-fg-color;
+
+/*
+      #error_message {
+         position:   absolute;
+         top:        0;
+         bottom:     0;
+         left:       0;
+         right:      0;
+         width:      100%;
+         height:     100%;
+         overflow-y: auto;
+      }
+*/
+   }
+}
+
+
+
+#popup_shield {
+   z-index:  420;
+//   display:  none;
+   position: fixed;
+   top:      0;
+   left:     0;
+   bottom:   0;
+   right:    0;
+   background-color: rgba(0,0,0, 0.5);
+}
+
+#hamburger_button {
+   top:     .25em;
+   right:   0;
+   width:   2em;
+   height:  2em;
+   margin-right:    .6em;
+   border-radius:   .25em;
+   background:      $content-bg-color url('Hamburger_icon-giver.svg') no-repeat center;
+   background-size: 75%;
+}
+
+#hamburger_menu {
+   z-index:   666;
+   display:   none;
+   overflow:  hidden;
+   position:  absolute;
+   top:       1em;
+   right:     1em;
+   max-width: $body-width - 2cm;
+   padding:   $pad-normal;
+   border:           $border-size solid black;
+   border-radius:    .5em;
+   box-shadow:       0 0 1em black;
+   background-color: $control-bg-color;
+   font-weight:      bold;
+
+   .table-cell {
+      vertical-align: middle;
+   }
+
+   .menu-icon {
+      height:         1.5em;
+      vertical-align: middle;
+   }
+}
+
+#crapulator {
+   z-index:   669;
+   display:   none;
+   position:  absolute;
+   top:       2em;
+   right:     2em;
+//   margin:    0 auto;
+   border:           $border-size solid black;
+   border-radius:    .5em;
+   box-shadow:       0 0 1em black;
+   background-color: $control-bg-color;
+}
+
+#dialogbox {
+   z-index:          1337;
+   display:          none;
+   position:         fixed;
+   top:              0;
+   bottom:           0;
+   left:             0;
+   right:            0;
+   max-width:        $body-width - 2cm;
+   max-height:       90%;
+   margin:           auto;
+   border:           $border-size solid black;
+   border-radius:    .5em;
+   box-shadow:       0 0 1em black;
+   background-color: $control-bg-color;
+   color:            $text-color;
+   line-height:      0;
+
+   p {
+      margin-bottom: $pad-normal;
+   }
+
+   #dialog_message {
+      display: inline-block;
+      cursor:      default;
+      width: auto;
+      line-height: 100%;
+   }
+
+   #dialog_button_container {
+      display: inline-block;
+      width:   100%;
+
+      .dialog-button {
+         cursor:           pointer;
+         display:          inline-block;
+         border:           $border-size solid $border-color;
+         background-color: $control-bg-color;
+         line-height:      1.5;
+         text-align:       left;
+         white-space:      nowrap;
+
+         div {
+            pointer-events: none;
+            float:          left;
+            padding-left:   $pad-medium;
+         }
+      }
+   }
+}
+
+#load_indicator {
+   z-index:          1337;
+   display:          none;
+   position:         fixed;
+   top:              0;
+   left:             0;
+   bottom:           0;
+   right:            0;
+   width:            7em;
+   height:           2em;
+   margin:           auto;
+   border:           $border-size solid black;
+   border-radius:    .5em;
+   box-shadow:       0 0 1em black;
+   background-color: $control-bg-color;
+   color:            green;
+   font-weight:      bold;
+   text-align:       center;
+   text-shadow:      0 0 1em yellow;
+}
+
+
+
+.toolbar {
+   cursor:           default;
+   padding:          0 $pad-normal;
+   background-color: $control-bg-color;
+   white-space:      nowrap;
+
+   input, button, textarea, select {
+      border: none;
+   }
+
+   button {
+      padding: 0;
+   }
+}
+
+.toolbar-button {
+   cursor:              pointer;
+}
+
+.button-large { @extend .toolbar-button;
+   min-width:           2em;
+   min-height:          2em;
+   line-height:         2em;
+   background-size:     100%;
+   background-position: center;
+}
+
+.button-large-text { @extend .toolbar-button;
+   min-height:          2em;
+   line-height:         2em;
+   padding-left:        2.25em;
+   padding-right:       $pad-normal;
+   background-size:     auto 100%;
+   background-position: $pad-medium center;
+}
+
+
+
+.icon-xlarge {
+   width:  2.5em;
+   height: 2.5em;
+   background-size: auto 100%;
+}
+
+.icon-large {
+   width:  2em;
+   height: 2em;
+   background-size: auto 100%;
+}
+
+.icon-medium {
+   width:  1.75em;
+   height: 1.75em;
+   background-size: auto 100%;
+}
+
+.icon-small {
+   width:  1.5em;
+   height: 1.5em;
+   background-size: auto 100%;
+}
+
+.icon-list {
+   width:  1.25em;
+   height: 1.25em;
+   background-size: auto 100%;
+}
+
+.icon-tiny {
+   width:  1em;
+   height: 1em;
+   background-size: auto 100%;
+}
+
+
+
+.icon-lists {
+   background-image:  url('Antu_org.kde.plasma.notes-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-products {
+   background-image:  url('Antu_view-barcode-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-vendors {
+   background-image:  url('Antu_kmymoney-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-crapulator {
+   background-image:  url('Antu_org.kde.plasma.calculator-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-notes {
+//   background-image:  url('Icon-notepad.svg');
+   background-image:  url('Antu_calligrawords-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-kitten-kitten {
+   background-image:  url('Antu_qgit.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-kitten-kitten-love {
+   background-image:  url('Antu_love-app.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-users {
+   background-image:  url('Antu_resource-group.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-groups {
+   background-image:  url('Antu_folder-public-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-user-profile {
+   background-image:  url('Antu_org.kde.plasma.userswitcher-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-logout {
+   background-image:  url('Antu_system-shutdown.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-about {
+//   background-image:  url('Help-browser.svg');
+   background-image:  url('Antu_drink-beer-giver.svg');
+   background-repeat: no-repeat;
+}
+
+
+
+.icon-window-close {
+   background-image:    url('Gnome-window-close-giver.svg');
+   background-repeat:   no-repeat;
+   background-size:     75%;
+   background-position: 0 .5em;
+   width:               1.5em;
+   height:              1.5em;
+}
+
+
+
+.icon-giver {
+   background-image:  url('G16.png');
+   background-repeat: no-repeat;
+   background-size:   80%;
+}
+
+.icon-add {
+   background-image:  url('Antu_vcs-added.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-go {
+   background-image:  url('Antu_edit-link-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-clear-field {
+   background-image:  url('Antu_edit-clear-locationbar-ltr-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-edit {
+   background-image:  url('Antu_document-edit-sign-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-delete {
+   background-image:  url('Antu_emblem-unavailable-giver.svg');
+   background-repeat: no-repeat;
+}
+
+/*
+.icon-trash {
+   background-image:  url('Gnome-edit-delete.svg');
+   background-repeat: no-repeat;
+}
+*/
+
+.icon-autocomplete {
+   background-image:  url('Antu_preferences-other.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-comment {
+   background-image:    url('Antu_dianara.svg');
+   background-repeat:   no-repeat;
+   background-size:     80%;
+   background-position: center;
+}
+
+
+
+.icon-ok {
+   background-image:  url('Antu_games-endturn-giver2.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-cancel {
+   background-image:  url('Antu_dialog-cancel-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-close {
+   background-image:  url('Gnome-window-close-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-save {
+   background-image:  url('Antu_document-save-as-template-giver.svg');
+   background-repeat: no-repeat;
+}
+
+
+
+.icon-scroll-top {
+   background-image:  url('Gnome-go-top-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-scroll-bottom {
+   background-image:  url('Gnome-go-bottom-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-back {
+   background-image:  url('Gnome-go-previous-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-forward {
+   background-image:  url('Gnome-go-next-giver.svg');
+   background-repeat: no-repeat;
+}
+
+.icon-refresh {
+   background-image:  url('Gnome-colors-view-refresh-giver.svg');
+   background-repeat: no-repeat;
+}
+
+
+
+#datalist {
+   z-index:          10;
+   display:          none;
+   position:         absolute;
+   min-height:       1.8em;
+   border-left:      $border-size solid $control-border-color;
+   border-right:     $border-size solid $control-border-color;
+   border-bottom:    $border-size solid $control-border-color;
+   background-color: $control-bg-color;
+   text-align:       left;
+   white-space:      nowrap;
+   overflow:         auto;
+   -webkit-overflow-scrolling: touch;
+
+   .datalist-row {
+      position:            relative;
+      min-height:          1.25em;
+      padding:             $pad-medium;
+   }
+
+   .pad-autocomplete {
+      padding-right: 2em;
+   }
+
+   .datalist-add {
+      padding-left:        1.6em;
+      background-color:    $content-bg-color;
+      background-size:     1.5em;
+      background-position: left center;
+   }
+
+   .datalist-heading {
+      color:               $list-heading-color;
+   }
+}
+
+#datalist .list-heading {
+   color: $list-heading-color;
+}
+
+#datalist .datalist-autocomplete {
+   position: absolute;
+   top:      0;
+   bottom:   0;
+   right:    0;
+   width:    2em;
+   background-size:     1em;
+   background-position: center;
+}
+
+#datalist_add_button_text {
+   padding:    $pad-medium;
+   font-style: italic;
+}
+
+
+
+/*** specific img ***/
+
+#kitten_kitten {
+   border: $pad-normal solid orange;
+}
+
+
+
+/*****************/
+/*** FORM SHIT ***/
+/*****************/
+
+@mixin appearance($style) {
+   appearance:         $style;
+   -moz-appearance:    $style;
+   -webkit-appearance: $style;
+}
+
+:-moz-placeholder           { color: #808080; font-style: italic; font-size: 75%; } /* Firefox 18- */
+::-moz-placeholder          { color: #808080; font-style: italic; font-size: 75%; } /* Firefox 19+ */
+::-webkit-input-placeholder { color: #808080; font-style: italic; font-size: 75%; line-height: 1.6em; } /* Chrome/Safari/Opera */
+:-ms-input-placeholder      { color: #808080; font-style: italic; font-size: 75%; } /* IE */
+::-ms-input-placeholder     { color: #808080; font-style: italic; font-size: 75%; } /* Edge */
+
+label {
+   position:    relative;
+   top:         -$pad-border;
+   font-size:   75%;
+   font-weight: bold;
+}
+
+input,
+textarea,
+button,
+select {
+   @include appearance(none);
+   box-sizing: border-box;
+   max-width:  100%;
+   height:     1.6em;
+   margin:     0;
+   padding:    $pad-border $pad-medium;
+   border:           $border-size solid $control-border-color;
+   background-color: $control-bg-color;
+   font:             inherit;
+	color:            inherit;
+}
+
+.item_quantity_text_field {
+   height:     auto;
+   border:     none;
+   padding:    0;
+   background-color: $content-bg-color;
+   text-align: right;
+}
+
+button,
+input[type='submit'],
+input[type='button'] {
+   cursor: pointer;
+}
+
+button.min-width,
+input[type='submit'].min-width,
+input[type='button'].min-width {
+   min-width: 5em;
+}
+
+input:disabled,
+textarea:disabled,
+button:disabled,
+select:disabled {
+   cursor: default;
+   color:  $disabled-text-color;
+}
+
+textarea {
+   resize: none;
+   width:  100%;
+   height: 2.8em;
+}
+
+textarea#note_content {
+   font:   normal $font-size-monospaced $font-face-monospaced;
+   height: 35em;
+}
+
+select {
+	@include appearance(none);
+	padding-right:   1.3em;
+/*
+   background:      white url(<%= asset_path "arrow.svg" %>) no-repeat right center;
+*/
+   background:      white url('MediaWiki_Vector_skin_action_arrow.svg') no-repeat right center;
+	background-size: 1.3em;
+}
+
+/*
+input[type='checkbox'] {
+   @include appearance(none);
+   border:           $border-size solid $control-border-color;
+   background-color: $control-bg-color;
+   width:  1em;
+   height: 1em;
+}
+*/
+
+.field_with_errors {
+   margin: 0;
+}
+
+.field_with_errors input, .field_with_errors textarea, .field_with_errors button {
+   border: $border-size solid $error-color;
+}
+
+
+

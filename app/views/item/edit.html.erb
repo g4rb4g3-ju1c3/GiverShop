@@ -1,0 +1,144 @@
+   <script type="text/javascript">
+
+      init_header({
+         page_title: "<%= render inline: escape_javascript(@list.name + ": " + @product.description) %>",
+         title:      "<%= render inline: escape_javascript(@list.name) %>",
+         subtitle:   "Edit item",
+         edit_form:  true
+      });
+
+      $(document).ready(function()
+      {
+         var text_element = document.getElementById("item_priority");
+
+         set_priority_option(text_element);
+         show_priority_value(null, text_element);
+      });
+
+      function content_callback(action, data)
+      {
+         switch (action) {
+
+            case "submit":
+               $("#item_edit_form").submit();
+               break;
+
+            case "cancel":
+               history.back();
+               break;
+
+            case "update":
+               history.back();
+               break;
+
+            default:
+               show_error("item#edit content_callback: unknown action \"" + action + "\"");
+               break;
+         }
+      }
+
+      function set_priority_option(text_element)
+      {
+         var select_element = document.getElementById("priority_select");
+
+         for (var i = 0, options_count = select_element.options.length; i < options_count; i++) {
+            if (select_element.options[i].value == text_element.value) {
+               select_element.selectedIndex = i;
+               break;
+            }
+         }
+         if (i == options_count) {
+            select_element.selectedIndex = i - 1;
+         }
+      }
+
+      function set_priority_value(select_element)
+      {
+         var text_element = document.getElementById("item_priority");
+
+         text_element.value = select_element.value;
+         show_priority_value(select_element, text_element);
+      }
+
+      function show_priority_value(select_element, text_element)
+      {
+         if (select_element === null) {
+            select_element = document.getElementById("priority_select");
+         }
+         text_element.style.display = (select_element.selectedIndex == 5 ? "inline" : "none");
+      }
+
+   </script>
+
+<%= render partial: "shared/list_item",
+           locals: {
+              item_text:     @product.description,
+              item_subtext:  @product.size,
+              item_url:      "navigate_to('" + edit_product_path(@product) + "');",
+              item_priority: @item.priority,
+              item_quantity: @item.quantity,
+              item_notes:    @item.notes
+           }
+-%>
+
+   <div class="hpad border-top pad-top">
+      <%= form_for "item",
+                   url:    list_item_path,
+                   method: "patch",
+                   remote: true,
+                   html:   { id: "item_edit_form" } do |f|
+      %>
+
+         <%= f.hidden_field "id", value: @item.id %>
+
+         <div class="table">
+            <div class="table-row">
+               <div class="table-cell pad-right pad-bottom">
+                  <%= f.label      "Priority" %><br>
+                  <%= select_tag   "priority",
+                                   options_for_select([
+                                      ["Absolute must",    100],
+                                      ["Important",         95],
+                                      ["High",              75],
+                                      ["Normal",            50],
+                                      ["Low",               25],
+                                      ["Only get on sale",   5],
+                                      ["Don't bother",       0],
+                                      ["Custom",            ""]
+                                   ]),
+                                   id:       "priority_select",
+                                   onchange: "set_priority_value(this);",
+                                   onkeyup:  "set_priority_value(this);"
+                  %>
+                  <%= f.text_field "priority", style:     "display: none; width: 3em;",
+                                               maxlength: 3,
+                                               oninput:   "set_priority_option(this);"
+                  %>
+               </div>
+
+               <div class="table-cell pad-left pad-bottom">
+                  <%= f.label      "Quantity" %><br>
+                  <%= f.text_field "quantity", maxlength: 4,
+                                               onfocus:   "this.select();" %>
+               </div>
+            </div>
+         </div>
+
+         <div class="pad-bottom">
+            <%= f.label       "List item notes"                %><br>
+            <%= f.text_area   "notes",          maxlength: 500 %>
+         </div>
+
+         <div class="float-right pad-left">
+            <%= f.submit   "Save" %>
+         </div>
+         <div class="float-right hpad">
+            <%= button_tag "Cancel",
+                           type:    "button",
+                           name:    "cancel",
+                           onclick: "history.back();"
+            %>
+         </div>
+      <% end %>
+
+   </div>

@@ -1,0 +1,262 @@
+<% if !defined? title        then title        = "" end %>
+<% if !defined? subtitle     then subtitle     = "" end %>
+<% if !defined? add_path     then add_path     = "" end %>
+<% if !defined? add_method   then add_method   = "" end %>
+<% if !defined? placeholder  then placeholder  = "" end %>
+<% if !defined? save_path    then save_path    = "" end %>
+
+   <div id="header">
+
+      <div id="titlebar">
+
+         <div id="popup_shield"></div>
+
+         <%###  HAMBURGERS  ###%>
+
+         <div id="hamburger_button" class="hamburger_button link enable-hover abs-pos"></div>
+
+         <div id="hamburger_menu">
+            <p class="pad-bottom-medium st2" style="font-style: italic;">Hamburger Menu</p>
+            <div class="table">
+
+               <div class="table-row">
+                  <div class="table-cell border-top pad-top-medium pad-right">
+                     <%= link_to group_index_path do %><div class="icon-small icon-groups"></div><% end %>
+                  </div>
+                  <div class="table-cell border-top pad-top-medium">
+                     <%= link_to group_index_path do %>Groups<% end %>
+                  </div>
+               </div>
+               <div class="table-row">
+                  <div class="table-cell pad-right">
+                     <%= link_to list_index_path do %><div class="icon-small icon-lists"></div><% end %>
+                  </div>
+                  <div class="table-cell">
+                     <%= link_to list_index_path do %>Lists<% end %>
+                  </div>
+               </div>
+               <div class="table-row">
+                  <div class="table-cell border-bottom pad-bottom-medium pad-right">
+                     <%= link_to note_index_path do %><div class="icon-small icon-notes"></div><% end %>
+                  </div>
+                  <div class="table-cell border-bottom pad-bottom-medium">
+                     <%= link_to note_index_path do %>Notes<% end %>
+                  </div>
+               </div>
+
+               <% if auth_su %>
+               <div class="table-row">
+                  <div class="table-cell pad-top-medium pad-right">
+                     <%= link_to product_index_path do %><div class="icon-small icon-products"></div><% end %>
+                  </div>
+                  <div class="table-cell pad-top-medium">
+                     <%= link_to product_index_path do %>Products<% end %>
+                  </div>
+               </div>
+               <div class="table-row">
+                  <div class="table-cell border-bottom pad-bottom-medium pad-right">
+                     <%= link_to vendor_index_path do %><div class="icon-small icon-vendors"></div><% end %>
+                  </div>
+                  <div class="table-cell border-bottom pad-bottom-medium">
+                     <%= link_to vendor_index_path do %>Vendors<% end %>
+                  </div>
+               </div>
+               <% end %>
+
+               <div class="table-row">
+                  <div class="table-cell border-bottom vpad-medium pad-right">
+                     <%= link_to "javascript:toggle_crapulator();" do %><div class="icon-small icon-crapulator"></div><% end %>
+                  </div>
+                  <div class="table-cell border-bottom vpad-medium">
+                     <%= link_to "javascript:toggle_crapulator();" do %>Crapulator<% end %>
+                  </div>
+               </div>
+
+               <% if auth_su %>
+               <div class="table-row">
+                  <div class="table-cell pad-top-medium pad-right">
+                     <%= link_to user_index_path do %><div class="icon-small icon-users"></div><% end %>
+                  </div>
+                  <div class="table-cell pad-top-medium">
+                     <%= link_to user_index_path do %>Users<% end %>
+                  </div>
+               </div>
+               <% end %>
+               <div class="table-row">
+                  <div class="table-cell vpad-medium pad-right">
+                     <%= link_to user_path(current_user_id) do %><div class="icon-small icon-user-profile"></div><% end %>
+                  </div>
+                  <div class="table-cell vpad-medium">
+                     <%= link_to current_user.name, user_path(current_user_id) %>
+                  </div>
+               </div>
+               <div class="table-row">
+                  <div class="table-cell border-bottom pad-bottom-medium pad-right">
+                     <%= link_to "javascript:window.location.href='" + logout_path + "';" do %><div class="icon-small icon-logout"></div><% end %>
+                  </div>
+                  <div class="table-cell border-bottom pad-bottom-medium">
+                     <%= link_to "javascript:window.location.href='" + logout_path + "';" do %>Logout<% end %>
+                  </div>
+               </div>
+
+               <div class="table-row">
+                  <div class="table-cell border-bottom vpad-medium pad-right">
+                     <%= link_to about_path do %><div class="icon-small icon-about"></div><% end %>
+                  </div>
+                  <div class="table-cell border-bottom vpad-medium">
+                     <%= link_to about_path do %>Aboot<% end %>
+                  </div>
+               </div>
+
+               <div class="table-row">
+                  <div class="table-cell border-bottom vpad-medium pad-right">
+                     <%= link_to kittenkitten_path do %><div class="icon-small icon-kitten-kitten"></div><% end %>
+                  </div>
+                  <div class="table-cell border-bottom vpad-medium">
+                     <%= link_to kittenkitten_path do %>Kitten Kitten<% end %>
+                     <div class="inline-block icon-tiny icon-kitten-kitten-love"></div>
+                  </div>
+               </div>
+
+            </div>
+
+            <p class="pad-top-medium st2 align-right" style="font-style: italic;">
+               <%= image_tag "Nuvola_apps_package_toys_svg.svg", { class: "menu-icon" } %>
+               <%= image_tag "Emoji_u1f408.svg",                 { class: "menu-icon" } %>
+               <%= image_tag "Emoji_u1f431.svg",                 { class: "menu-icon" } %>
+               <%= image_tag "Tomcat.svg",                       { class: "menu-icon" } %>
+               <%= image_tag "Black_Cat_Vector.svg",             { class: "menu-icon" } %>
+               with kitties
+            </p>
+         </div>
+
+         <%###  TITLE + SUBTITLE  ###%>
+
+         <div class="hpad">
+            <p id="title"    class="h1  truncate ellipsis"></p>
+            <p id="subtitle" class="st2 truncate ellipsis"></p>
+         </div>
+
+      </div>
+
+      <%###  CRAPULATOR  ###%>
+
+      <div id="crapulator">
+         <div class="float-right link icon-window-close pad-medium" onclick="toggle_crapulator();"></div>
+         <form class="float-left hvpad">
+            <div class="table">
+               <div class="table-row">
+                  <div class="table-cell">
+                     $&nbsp;
+                  </div>
+                  <div class="table-cell">
+                     <input type="text" id="numerator1"   style="max-width: 5em;" maxlength="10" onkeyup="crapulate();" />
+                     <hr style="border: .05em solid black">
+                     <input type="text" id="denominator1" style="max-width: 5em;" maxlength="10" onkeyup="crapulate();" />
+                  </div>
+                  <div class="table-cell hpad valign-middle align-center">
+                     <font style="font-weight: bold;">=</font>
+                  </div>
+                  <div class="table-cell">
+                     $&nbsp;
+                  </div>
+                  <div class="table-cell">
+                     <input type="text" id="numerator2"   style="max-width: 5em;" maxlength="10" disabled />
+                     <hr style="border: .05em solid black">
+                     <input type="text" id="denominator2" style="max-width: 5em;" maxlength="10" onkeyup="crapulate();" />
+                  </div>
+               </div>
+            </div>
+         </form>
+      </div>
+
+      <%###  MAIN TOOLBAR  ###%>
+
+      <div class="table toolbar" id="main_toolbar">
+         <div class="table-row">
+
+            <%###  ADD TEXT  ###%>
+            <div class="table-cell control-border-right"
+                 id="toolbar_giver_bar">
+               <div class="table-cell control-border-left control-border-right expand-x valign-middle">
+                  <%= form_for "",
+                               url:    "",
+                               method: "",
+                               remote: true,
+                               html: { id:    "toolbar_giver_form",
+                                       class: "rel-pos"   } do |f| %>
+                     <%= f.text_field "add_text",
+                                      maxlength:    100,
+                                      size:         "auto",
+                                      class:        "expand",
+                                      style:        "height: 2em;",
+                                      id:           "toolbar_giver_box",
+                                      autocomplete: "off"
+                     %>
+                     <div class="toolbar-button abs-pos icon-clear-field link enable-hover"
+                          id="toolbar_clear_button" tabindex="0">
+                     </div>
+                     <%= f.submit "", class: "hidden" %>
+                  <% end %>
+               </div>
+               <div class="table-cell toolbar-button button-large icon-add link enable-hover"
+                    id="toolbar_giver_button" tabindex="0">
+               </div>
+            </div>
+
+            <%###  FORM BUTTONS  ###%>
+            <div class="table-cell control-border-left control-border-right expand-x align-right" style="line-height: 2em;" id="toolbar_form_buttons">
+               <div class="float-right toolbar-button button-large-text enable-hover icon-ok"     id="toolbar_form_ok_button"     tabindex="0">Done</div>
+               <div class="float-right toolbar-button button-large-text enable-hover icon-cancel" id="toolbar_form_cancel_button" tabindex="0">Cancel</div>
+            </div>
+
+            <%###  VIEW BUTTONS  ###%>
+<!--
+            <div class="table-cell control-border-left control-border-right align-right" style="line-height: 2em;" id="toolbar_view_buttons">
+               <div class="float-right toolbar-button button-large-text icon-close pad-right link enable-hover" id="toolbar_close_button" tabindex="0" onclick="history.back();">Close</div>
+               <div class="float-right toolbar-button button-large-text icon-save  pad-right link enable-hover" id="toolbar_save_button"  tabindex="0" onclick="window.location.href = $(this).attr('save_path');">Save</div>
+            </div>
+-->
+
+         </div>
+      </div>
+
+      <%###  DIALOG BOX  ###%>
+
+      <div id="dialogbox">
+<!--
+         <div class="dialog-button float-right link icon-window-close" id="dialog_close_button" tabindex="0"></div>
+-->
+         <div class="inline-block hvpad align-left" id="dialog_content">
+            <div class="hvpad align-left" id="dialog_message">
+            </div><br>
+            <div class="hvpad" id="dialog_button_container">
+               <div class="dialog-button float-right hvpad-medium pad-right enable-hover" id="ok_button">
+                  <div class="icon-small icon-ok"></div>
+                  <div class="pad-left-medium">OK</div>
+               </div>
+               <div class="dialog-button float-left hvpad-medium pad-right enable-hover" id="cancel_button">
+                  <div class="icon-small icon-cancel"></div>
+                  <div class="pad-left-medium">Cancel</div>
+               </div>
+               <div class="dialog-button float-right hvpad-medium pad-right enable-hover" id="close_button">
+                  <div class="icon-small icon-cancel"></div>
+                  <div class="pad-left-medium">Close</div>
+               </div>
+               <div class="dialog-button float-right hvpad-medium pad-right enable-hover" id="save_button">
+                  <div class="icon-small icon-save"></div>
+                  <div class="pad-left-medium">Save</div>
+               </div>
+               <div class="dialog-button float-left hvpad-medium pad-right enable-hover" id="discard_button">
+                  <div class="icon-small icon-cancel"></div>
+                  <div class="pad-left-medium">Discard</div>
+               </div>
+               <div class="dialog-button float-right hvpad-medium pad-right enable-hover" id="delete_button">
+                  <div class="icon-small icon-delete"></div>
+                  <div class="pad-left-medium">Delete</div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+   </div>

@@ -1,0 +1,83 @@
+   <script type="text/javascript">
+
+      init_header({
+         title:       "Vendors",
+         subtitle:    "These guys know what you need",
+         search_bar:  true,
+         placeholder: "New vendor"
+      });
+
+      $(document).ready(function()
+      {
+         $("#vendors_list .edit_button").click(function(event) {
+            navigate_to($(event.target).attr("edit_url"));
+         });
+
+         $("#vendors_list .delete_button").click(function(event) {
+            delete_to(
+               $(event.target).attr("delete_url"),
+               "<p>Delete <font class=\"dialog-highlight\">" + $(event.target).attr("delete_param_1") + "</font>?</p>" +
+               "<p>This vendor\'s inventory will be deleted and all price, location, etc information will be lost.</p>" +
+               "<p>Products will not be affected.</p>" +
+               "<p>You can\'t undo this.</p>"
+            );
+         });
+      });
+
+      function content_callback(action, data)
+      {
+         switch (action) {
+
+            case "jump":
+               jump_to_element(data);
+               break;
+
+            case "submit":
+               $.ajax({
+                  url:    "<%= vendor_index_path %>",
+                  method: "post",
+                  data: {
+                     add_text: data
+                  },
+                  error: ajax_error_handler
+               });
+               break;
+
+            case "create":
+               refresh_list(data);
+               break;
+
+            case "destroy":
+               delete_list_row(data);
+               break;
+
+            default:
+               show_error("vendor#index content_callback: unknown action \"" + action + "\"");
+               break;
+         }
+      }
+
+   </script>
+
+<%= render partial: "shared/datalist", locals: { add_new_text: "Add new vendor" } -%>
+
+   <% if @vendors.any? %>
+   <div class="table list border-bottom" id="vendors_list">
+      <% @vendors.each do |vendor| %>
+<%= render partial: "shared/list_item",
+           locals: {
+              row_id:         vendor.id,
+              item_text:      vendor.name,
+              item_url:       "navigate_to('" + vendor_inventory_index_path(vendor.id) + "');",
+#              item_notes:     vendor.address,
+              product_notes:  vendor.notes,
+              edit_url:       edit_vendor_path(vendor.id),
+              delete_url:     vendor_path(vendor.id),
+              delete_param_1: vendor.name
+           }
+-%>
+      <% end %>
+   </div>
+   <% else %>
+<%= render partial: "shared/empty_list", locals: { caption: "No vendors" } -%>
+   <% end %>

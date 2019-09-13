@@ -1,0 +1,28 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         givershop.init({
+            controller:  "<%= controller_name %>",
+            action:      "<%= action_name     %>",
+            update_settings_path: "<%= update_settings_user_path(@user.id) %>",
+
+            title:       "<%= escape_javascript(@user.name)  %>",
+            subtitle:    "<%= escape_javascript(@user.notes) %>",
+            edit_form:   true
+         });
+      });
+
+   </script>
+
+   <div class="hvpad">
+
+      <%= link_to list_index_path do %>Lists<% end %><br>
+      <%= link_to note_index_path do %>Notes<% end %><br>
+      <br>
+      <div class="checkbox<%= get_setting("show_advanced") ? " checked" : "" %>" id="show_advanced"></div>
+      Show advanced features<br>
+      <br>
+      <%= link_to "Send email", update_settings_user_path(@user.id, email: true), remote: true, method: "post" %>
+
+   </div>

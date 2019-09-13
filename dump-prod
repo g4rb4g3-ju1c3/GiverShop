@@ -1,0 +1,2 @@
+#!/bin/bash
+mysqldump -u root -p -n -t -c --ignore-table=givershop_production.schema_migrations givershop_production > givershop_production.sql

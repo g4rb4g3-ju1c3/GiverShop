@@ -1,0 +1,7 @@
+<% if !@datalist.nil? && @datalist.any? %>
+   <datalist id="<%= datalist_id %>">
+   <% @datalist.each do |item| %>
+      <option value="<%= item.text %>"></option>
+   <% end %>
+   </datalist>
+<% end %>

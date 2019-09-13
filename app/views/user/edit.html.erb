@@ -1,0 +1,16 @@
+   <script type="text/javascript">
+
+      init_header({
+         page_title: "Edit user: <%= @user.name %>",
+         title:      "<%= @user.name %>",
+         edit_form:  true
+      });
+
+   </script>
+
+<%= render partial: "form",
+                    locals: {
+                       submit_path:   user_path,
+                       submit_method: "patch"
+                    }
+-%>

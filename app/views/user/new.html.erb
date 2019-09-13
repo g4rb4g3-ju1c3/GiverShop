@@ -1,0 +1,15 @@
+   <script type="text/javascript">
+
+      init_header({
+         title:     "New user",
+         edit_form: true
+      });
+
+   </script>
+
+<%= render partial: "form",
+                    locals: {
+                       submit_path:   user_index_path,
+                       submit_method: "post"
+                    }
+-%>

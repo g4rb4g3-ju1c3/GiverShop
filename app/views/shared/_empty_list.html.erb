@@ -1,0 +1,12 @@
+<% if !defined? caption then caption = "fgsfds" end %>
+<% if !defined? hidden  then hidden  = false    end %>
+   <div class="list-row pad-top align-center<%= " hidden" if hidden %>"
+        id="empty_list">
+      <p><%= caption %></p>
+      <%= image_tag("kittenkittentongue.jpg",
+          id:    "kittenkittentongue",
+          alt:   "Kitten Kitten looking stupid",
+          title: "Kitten Kitten needs kibbles from the kitty cat num nums store",
+          style: "margin: .5em 0;")
+      %>
+   </div>

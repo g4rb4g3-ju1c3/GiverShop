@@ -1,0 +1,107 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         givershop.init({
+            controller:  "<%= controller_name %>",
+            action:      "<%= action_name     %>",
+
+            page_title: "Edit list: <%= render inline: escape_javascript(@list.name) %>",
+            title:      "Edit list",
+            edit_form:  true
+         });
+      });
+
+   </script>
+
+   <%= form_for "list",
+                url:    list_path,
+                method: "patch",
+                remote: true,
+                html:   { id: "list_edit_form" } do |f|
+   %>
+      <div class="hvpad">
+         <div class="pad-bottom">
+            <%= f.label      "Name"                        %>
+            <%= f.text_field "name",        maxlength: 100 %>
+         </div>
+
+         <div>
+            <%= f.label      "Description"                 %>
+            <%= f.text_field "description", maxlength: 255 %>
+         </div>
+
+         <div>
+            <%= f.label      "Notes"                       %>
+            <%= f.text_area  "notes",       maxlength: 500 %>
+         </div>
+      </div>
+
+      <%= f.submit "", class: "hidden" %>
+   <% end %>
+
+   <div class="hpad pad-bottom">
+      <%= label_tag "", "Share list", class: "link", onclick: "$('#share_list').toggleClass('hidden');" %>
+      <div class="expand-x hidden" id="share_list">
+         <%= form_for "",
+                      url:    share_list_path,
+                      method: "post",
+                      remote: true,
+                      html:   { id: "share_list_form" } do |share_form|
+         %>
+            <%= share_form.label      "Enter an email address" %>
+            <%= share_form.text_field "email_address",
+                                      maxlength: 254 %>
+            <%= button_tag   "Invite",
+                             id:      "share_invite_button",
+                             onclick: "$('#share_list_form').submit();" %>
+            <%= share_form.submit "", class: "hidden" %>
+         <% end %>
+      </div>
+   </div>
+
+   <% if @users.any? %>
+   <%= label_tag "", "Select permissions", class: "hpad" %>
+<!--
+   <div class="table vpad border-top list-bg">
+      <div class="table-row">
+         <div class="table-cell hpad">
+            <div class="align-center">LE</div>
+            <div class="checkbox" id="select_all_edit"></div>
+         </div>
+         <div class="table-cell pad-right">
+            <div class="align-center">LD</div>
+            <div class="checkbox" id="select_all_delete"></div>
+         </div>
+         <div class="table-cell pad-right expand-x">
+            <div class="rel-pos st1 disabled" style="top: -.1em;">Edit / Delete</div>
+            Select all
+         </div>
+      </div>
+   </div>
+-->
+   <div class="table list border-top border-bottom" id="users_list">
+      <% @users.each do |user| %>
+         <% if user.id != current_user_id %>
+      <div class="table-row">
+         <div class="table-cell expand-x">
+            <div>
+               <span class="link user-name" onclick="$('#permissions_<%= user.id.to_s %>').toggleClass('hidden');"><%= user.name %></span>
+               <% if auth_su %>
+               <span class="st2 link" onclick="navigate_to('<%= edit_user_path(user.id) %>', null);">Edit user</span>
+               <% end %>
+            </div>
+            <div class="pad-top hidden" id="permissions_<%= user.id %>" data-user_id="<%= user.id %>">
+               <div class="checkbox list-edit<%=        auth_permission(user, "LE")  ? " checked" : "" %>"></div> List: Edit<br>
+               <div class="checkbox list-delete<%=      auth_permission(user, "LD")  ? " checked" : "" %>"></div> List: Delete<br>
+               <div class="checkbox list-item-check<%=  auth_permission(user, "LIC") ? " checked" : "" %>"></div> Items: Check/uncheck<br>
+               <div class="checkbox list-item-add<%=    auth_permission(user, "LIA") ? " checked" : "" %>"></div> Items: Add<br>
+               <div class="checkbox list-item-edit<%=   auth_permission(user, "LIE") ? " checked" : "" %>"></div> Items: Edit<br>
+               <div class="checkbox list-item-delete<%= auth_permission(user, "LID") ? " checked" : "" %>"></div> Items: Delete<br>
+            </div>
+         </div>
+      </div>
+         <% end %>
+      <% end %>
+   </div>
+   <% end %>

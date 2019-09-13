@@ -1,0 +1,84 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         givershop.init({
+            controller:  "<%= controller_name %>",
+            action:      "<%= action_name     %>",
+
+            page_title: "Edit group: <%= render inline: escape_javascript(@group.name) %>",
+            title:      "Edit group",
+            edit_form:  true
+         });
+      });
+
+   </script>
+
+   <%= form_for "group",
+                url:    group_path,
+                method: "patch",
+                remote: true,
+                html:   { id: "group_edit_form" } do |f|
+   %>
+
+      <div class="hvpad">
+         <div class="pad-bottom">
+            <%= f.label      "Name"         %>
+            <%= f.text_field "name",
+                             maxlength: 100 %>
+         </div>
+
+         <div>
+            <%= f.label      "Description"  %>
+            <%= f.text_area  "description",
+                             maxlength: 500 %>
+         </div>
+      </div>
+      <% if @users.any? %>
+
+      <%= f.hidden_field "admins", id: "admin_id_list" %>
+      <%= f.hidden_field "users",  id: "user_id_list"  %>
+
+      <%= f.label "Group members", class: "hpad" %>
+      <div class="table vpad border-top list-bg">
+         <div class="table-row">
+            <div class="table-cell hpad">
+               <div class="align-center">A</div>
+               <div class="checkbox" id="select_all_admins"></div>
+            </div>
+            <div class="table-cell pad-right">
+               <div class="align-center">U</div>
+               <div class="checkbox" id="select_all_users"></div>
+            </div>
+            <div class="table-cell pad-right expand-x">
+               <div class="rel-pos st1 disabled" style="top: -.1em;">Administrator / User</div>
+               Select all
+            </div>
+         </div>
+      </div>
+      <div class="table list border-top border-bottom" id="users_list">
+         <% @users.each do |user| %>
+         <div class="table-row">
+            <div class="table-cell hpad">
+               <div class="checkbox admin<%= auth_permission_by_id(@group.admins, user.id) ? " checked" : "" %>" user_id="<%= user.id %>"></div>
+            </div>
+            <div class="table-cell pad-right">
+               <div class="checkbox user<%= auth_permission_by_id(@group.users, user.id) ? " checked" : "" %>" user_id="<%= user.id %>"></div>
+            </div>
+            <div class="table-cell expand-x">
+               <% if auth_su %>
+               <span class="link" onclick="navigate_to('<%= edit_user_path(user.id) %>', null);">
+               <% else %>
+               <span>
+               <% end %>
+                  <%= user.name %>
+               </span>
+            </div>
+         </div>
+         <% end %>
+      </div>
+      <% end %>
+
+      <%= f.submit "", class: "hidden" %>
+
+   <% end %>

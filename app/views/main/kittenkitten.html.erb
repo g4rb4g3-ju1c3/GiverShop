@@ -1,0 +1,91 @@
+   <script type="text/javascript">
+
+      init_header({
+         title:       "Kitten Kitten",
+         subtitle:    "Super cute and a good boy",
+         search_bar:  true,
+         placeholder: "Talk to Kitten Kitten"
+      });
+
+      $(document).ready(function()
+      {
+         $("#kitten_kitten_central").css("top",    $("#header").height())
+         $("#kitten_kitten_central").css("bottom", $("#footer").height())
+      });
+
+      function content_callback(action, data)
+      {
+         switch (action) {
+            case "submit":
+               kitty_reply(data);
+               break;
+         }
+      }
+
+      var kitten_kitten_gone = false;
+
+      function kitty_reply(text)
+      {
+         text = text.trim().toLowerCase();
+         if (text.search("fat") != -1) {
+            $("#kitty_reply").hide();
+            $("#message").hide();
+            $("#emotional_state").hide();
+            $("#kitten_kitten").attr("src", "<%= asset_path "catdoor.gif" %>");
+            $("#kitten_kitten").attr("width", "100%");
+         }
+         else if (kitten_kitten_gone) {
+            alert("You need to open a can of cat foods to make Kitten Kitten come home.");
+         }
+         else if (text == "") {
+            $("#kitty_reply").show();
+            $("#kitty_reply").text("...");
+         }
+         else if (text.search("what are you doing") != -1) {
+            $("#kitty_reply").hide();
+            $("#message").hide();
+            $("#emotional_state").hide();
+            $("#kitten_kitten").attr("src", "<%= asset_path "crap.svg" %>");
+         }
+         else if (text.slice(-1) == "?") {
+            $("#kitty_reply").html("\"Mew mew mew meow.\"<br><br><i>\"Your question is intriguing.\"</i>").show();
+         }
+         else {
+            $("#kitty_reply").show();
+            $("#kitty_reply").html("\"Meow meow meowie wowie mew.\"<br><br><i>\"Wow, that\'s fascinating.\"</i>");
+         }
+      }
+
+   </script>
+
+   <div id="kitten_kitten_central" class="fixed-pos align-center" style="left: 0; right: 0;">
+      <div id="message" class="abs-pos expand-x align-center" style="top: 1em;">
+         He's the Dumpster Grumpster!
+      </div>
+      <div id="emotional_state" class="abs-pos expand-x align-center" style="bottom: .25em; font-size: 250%;">
+         <%= image_tag "Antu_face-in-love.svg", { style: "height: 1em;" } %>
+         <%= image_tag "Antu_face-in-love.svg", { style: "height: 1em;" } %>
+         <%= image_tag "Antu_face-in-love.svg", { style: "height: 1em;" } %>
+      </div>
+      <%= image_tag "kittenkitten.jpg",
+                    id:      "kitten_kitten",
+                    alt:     "Kitten Kitten when he was just Kitten",
+                    title:   "Kitten Kitten needs kibbles from the kitty cat num nums store",
+                    style:   "position: absolute; top: 0; bottom: 0; left: 0; right: 0; max-width: 15em; margin: auto; box-shadow: 0 0 3em purple;",
+                    onclick: "$('#kitty_reply').hide();" +
+                             "$('#message').text('Oh no!'); " +
+                             "$('#kitten_kitten').toggle('slide', { direction: 'right' }, 2000, function() { " +
+                                "$('#message').text('You scared Kitten Kitten away!'); " +
+                                "$('#emotional_state').html('" +
+                                   escape_javascript(image_tag "Antu_face-sad.svg", { style: "height: 1em;" }) +
+                                   escape_javascript(image_tag "Antu_face-sad.svg", { style: "height: 1em;" }) +
+                                   escape_javascript(image_tag "Antu_face-sad.svg", { style: "height: 1em;" }) + "'); " +
+                                "kitten_kitten_gone = true; " +
+                             "});"
+      %>
+      <div id="kitty_reply"
+           class="hidden click-through abs-pos st1 align-left hvpad-medium"
+           style="top: 40%; left: 55%; max-width: 7em;
+                  border-radius: .5em; background: rgba(0,0,0, 0.5);
+                  color: #CCFFCC; text-shadow: 0 0 .1em black;"></div>
+   </div>

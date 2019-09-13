@@ -1,0 +1,116 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         set_anger_level(0);
+      });
+
+      var countdown_timer = null;
+      var countdown       = 10;
+
+      function set_anger_level(intensity)
+      {
+         switch (intensity) {
+            case 0:
+               shadow  = "none";
+               message = "Mew";
+               break;
+            case 1:
+               shadow  = "0 0 1em orange";
+               message = "No";
+               break;
+            case 2:
+               shadow  = "0 0 2em yellow";
+               message = "Don't do it";
+               break;
+            case 3:
+               shadow  = "0 0 3em red";
+               message = "It's booby-trapped";
+               break;
+            case 4:
+               $("#trippin_kitty").attr("src", "<%= asset_path "Musulmana.svg" %>")
+               message = "Surprise!";
+               countdown_timer = setInterval(function() {
+                  countdown--;
+                  if (countdown == 1) {
+                     $("#message").text("Aloha snackbar!!!");
+                  }
+                  else {
+                     $("#message").text(countdown);
+                  }
+                  if (countdown == 0) {
+                     explode();
+                  }
+               }, 1000);
+               break;
+            default:
+               explode();
+               break;
+         }
+         $("#trippin_kitty").css("box-shadow", shadow);
+         $("#message").text(message);
+      }
+
+      function explode()
+      {
+         clearInterval(countdown_timer);
+         countdown = 10;
+         $(body).effect("explode", { pieces: 9 }, 1000, function() {
+            $("head").html("<title>" + random_shit() + "</title>");
+            $("body").html("");
+         });
+         $("body").animate({ backgroundColor: "rgb(255,0,0)" }, 1000);
+      }
+
+      function random_shit()
+      {
+         var shit = "";
+
+         for (i = 0; i < 100; i++) {
+            shit += Math.random().toString(36);
+         }
+
+         return shit;
+      }
+
+   </script>
+
+   <div class="hvpad align-left">
+      <%= form_for "",
+                   url:    login_path,
+                   method: "post",
+                   remote: true do |f|
+      %>
+         <%= f.label          "User Name"     %><br>
+         <%= f.text_field     "username",
+                              id:        "username",
+                              maxlength: 100,
+                              autofocus: true %><br>
+
+         <%= f.label          "Password"      %><br>
+         <%= f.password_field "password",
+                              id:        "password",
+                              maxlength: 72   %><br>
+
+         <div class="pad-top">
+         <div class="rel-pos table-cell expand-x hpad align-center">
+            <%= image_tag "trippin-kitty.jpg",
+                          id:      "trippin_kitty",
+                          alt:     "Cat on LSD",
+                          title:   "mew",
+                          onclick: "explode();"
+            %>
+            <span id="message"
+                  class="click-through abs-pos hvpad-medium"
+                  style="top: 5%; left: 30%;
+                         border-radius: .5em; background: rgba(0,0,0, .5);
+                         color: yellow; font-size: .5em; text-shadow: 0 0 .1em white;"></span>
+         </div>
+
+         <div class="pos-rel table-cell valign-top">
+            <%= f.submit "Login" %>
+         </div>
+         </div>
+      <% end %>
+
+   </div>

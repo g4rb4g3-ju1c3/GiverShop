@@ -1,0 +1,18 @@
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" version="1.0" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<defs>
+<linearGradient id="b" y2="-.98332" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="40.378" gradientTransform="translate(-1.9602 48.006)" y1="-11.068" x1="18.397"/>
+<linearGradient id="a">
+<stop stop-color="#fff" offset="0"/>
+<stop stop-color="#fff" stop-opacity="0" offset="1"/>
+</linearGradient>
+<linearGradient id="c" y2="35.856" xlink:href="#a" gradientUnits="userSpaceOnUse" x2="39.162" gradientTransform="matrix(0 1.0046 1 0 -1.9523 -3.0377)" y1="15.633" x1="-.97796"/>
+</defs>
+<path style="color:black" d="m7.5398 20.591l16.506 18.915 16.423-18.915h-7.87v-15.085l-17.055 0.0004v15.085h-8.0042z" stroke="#204a87" fill="#3465a4"/>
+<path opacity=".35393" style="color:black" d="m16.048 6h7.952l-0.024 32.769-15.345-17.615h7.417v-15.154z" fill="#729fcf"/>
+<g>
+<path opacity="0.354" style="color:black" d="m9.6809 21.573l14.386 16.517 14.199-16.517h-6.738v-15.067l-14.978 0.0004v15.067h-6.8691z" stroke="url(#c)" fill="none"/>
+<rect height="4" stroke="#204a87" fill="#3465a4" style="color:black" width="33" y="40.506" x="7.5398"/>
+<rect height="2" stroke="url(#b)" fill="none" style="color:black" width="31" opacity="0.354" y="41.506" x="8.5398"/>
+</g>
+<rect opacity="0.354" transform="rotate(-90)" height="16" width="3" y="8.0398" x="-44.006" fill="#729fcf"/>
+</svg>

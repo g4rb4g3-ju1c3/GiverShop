@@ -1,0 +1,77 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         givershop.init({
+            controller:  "<%= controller_name %>",
+            action:      "<%= action_name     %>",
+            add_path:    "<%= note_index_path %>",
+
+            title:       "Notes",
+            search_bar:  true,
+            placeholder: "New note"
+         });
+      });
+
+   </script>
+
+<%= render partial: "shared/datalist", locals: { add_new_text: "Add new note" } -%>
+
+   <div class="table list" id="note_list">
+   <% if @notes.any? %>
+      <% @notes.each do |note| %>
+         <% superuser      = auth_su %>
+         <% edit_allowed   = auth_permission(note, "NE") %>
+         <% delete_allowed = auth_permission(note, "ND") %>
+
+<%#= render partial: "shared/list_item",
+           locals: {
+              row_id:         note.id,
+              item_text:      note.title,
+              item_url:       "navigate_to('" + note_index_path(vendor.id) + "');",
+              product_notes:  vendor.notes,
+              save_url:       download_note_path(note.id),
+              edit_url:       edit_note_path(vendor.id),
+              delete_url:     note_path(vendor.id),
+              delete_param_1: note.title
+           }
+-%>
+
+      <div class="table-row" id="list_row_<%= note.id %>">
+         <div class="table-cell expand-x valign-top">
+            <% if edit_allowed || superuser %>
+            <%= link_to note.title, edit_note_path(note.id) %>
+            <% else %>
+            <%= link_to note.title, note_path(note.id) %>
+            <% end %>
+            <% if !note.description.blank? %>
+               <div class="st2"><%= note.description %></div>
+            <% end %>
+         </div>
+         <div class="table-cell pad-left valign-top">
+            <div class="icon-list icon-save link enable-hover"
+                 onclick="window.location.href = '<%= download_note_path(note.id) %>';">
+            </div>
+         </div>
+         <% if edit_allowed || superuser %>
+         <div class="table-cell pad-left valign-top<%= !edit_allowed && superuser ? " dimmed" : "" %>">
+            <div class="icon-list icon-edit link enable-hover"
+                 onclick="navigate_to('<%= edit_note_path(note.id) %>');">
+            </div>
+         </div>
+         <% end %>
+         <% if delete_allowed || superuser %>
+         <div class="table-cell pad-left valign-top<%= !delete_allowed && superuser ? " dimmed" : "" %>">
+            <div class="icon-list icon-delete link enable-hover"
+                 onclick="delete_to('<%= note_path(note.id) %>',
+                                    '<p>Delete <font class=&quot;dialog-highlight&quot;><%= escape_javascript(note.title) %></font>?</p>' +
+                                    '<p>You can\'t undo this.</p>');">
+            </div>
+         </div>
+         <% end %>
+      </div>
+      <% end %>
+   <% else %>
+<%= render partial: "shared/empty_list", locals: { caption: "No notes" } -%>
+   <% end %>
+   </div>

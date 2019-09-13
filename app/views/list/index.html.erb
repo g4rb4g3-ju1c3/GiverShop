@@ -1,0 +1,53 @@
+   <script type="text/javascript">
+
+      $(document).ready(function()
+      {
+         givershop.init({
+            controller:  "<%= controller_name %>",
+            action:      "<%= action_name     %>",
+            add_path:    "<%= list_index_path %>",
+
+            title:       "Lists",
+            search_bar:  true,
+            placeholder: "New list"
+         });
+      });
+
+   </script>
+
+<%= render partial: "shared/datalist", locals: { add_new_text: "Add new list" } -%>
+
+   <div class="table list">
+   <% if @lists.any? %>
+      <% superuser = auth_su %>
+      <% @lists.each do |list| %>
+         <% edit_allowed   = auth_permission(list, "LE") %>
+         <% delete_allowed = auth_permission(list, "LD") %>
+      <div class="table-row" id="list_row_<%= list.id %>">
+         <div class="table-cell expand-x valign-top">
+            <%= link_to list.name, list_path(list.id) %>
+            <% if !list.notes.blank? %>
+               <div class="st2"><%= list.notes %></div>
+            <% end %>
+         </div>
+         <% if edit_allowed || superuser %>
+         <div class="table-cell pad-left valign-top<%= !edit_allowed && superuser ? " dimmed" : "" %>">
+            <div class="icon-list icon-edit link enable-hover"
+                 onclick="navigate_to('<%= edit_list_path(list.id) %>');"></div>
+         </div>
+         <% end %>
+         <% if delete_allowed || superuser %>
+         <div class="table-cell pad-left valign-top<%= !delete_allowed && superuser ? " dimmed" : "" %>">
+            <div class="icon-list icon-delete link enable-hover"
+                 onclick="delete_to('<%= list_path(list.id) %>',
+                                    '<p>Delete <font class=&quot;dialog-highlight&quot;><%= escape_javascript(list.name) %></font>?</p>' +
+                                    '<p>You can\'t undo this.</p>');">
+            </div>
+         </div>
+         <% end %>
+      </div>
+      <% end %>
+   <% else %>
+<%= render partial: "shared/empty_list", locals: { caption: "No lists" } -%>
+   <% end %>
+   </div>
