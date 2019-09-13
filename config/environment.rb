@@ -6,9 +6,9 @@ Rails.application.initialize!
 
 config.action_mailer.delivery_method = :smtp
 config.action_mailer.smtp_settings = {
-   address:              'escm.port0.org',
+   address:              'example.com',
    port:                 587,
-   domain:               'escm.port0.org',
+   domain:               'example.com',
    user_name:            '<username>',
    password:             '<password>',
    authentication:       'plain',
